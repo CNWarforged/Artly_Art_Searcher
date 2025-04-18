@@ -53,13 +53,15 @@ CREATE TABLE `Artists` (
   `fullName` varchar(300) NOT NULL,
   `genderCode` varchar(10) NOT NULL,
   `queer` tinyint(2) DEFAULT NULL,
-  `countryResidence` varchar(100) DEFAULT NULL,
-  `stateResidence` varchar(10) DEFAULT NULL,
-  `cityResidence` varchar(150) DEFAULT NULL,
+  `residenceLocID` int(11) DEFAULT NULL,
+  `birthLocID` int(11) DEFAULT NULL,
   PRIMARY KEY (`artistID`),
   UNIQUE KEY `artistID_UNIQUE` (`artistID`),
   KEY `genderID_idx` (`genderCode`),
-  CONSTRAINT `genderID` FOREIGN KEY (`genderCode`) REFERENCES `GenderCodes` (`genderID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+  KEY `locationID_idx` (`residenceLocID`),
+  KEY `locationID_idx1` (`birthLocID`),
+  CONSTRAINT `genderID` FOREIGN KEY (`genderCode`) REFERENCES `GenderCodes` (`genderID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `locationID` FOREIGN KEY (`residenceLocID`) REFERENCES `Locations` (`locationID`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -130,6 +132,33 @@ INSERT INTO `GenderCodes` VALUES ('F','Cis Female'),('IS','Intersex'),('M','Cis 
 UNLOCK TABLES;
 
 --
+-- Table structure for table `Locations`
+--
+
+DROP TABLE IF EXISTS `Locations`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `Locations` (
+  `locationID` int(11) NOT NULL AUTO_INCREMENT,
+  `Country` varchar(100) NOT NULL,
+  `State` varchar(5) DEFAULT NULL,
+  `City` varchar(150) DEFAULT NULL,
+  PRIMARY KEY (`locationID`),
+  UNIQUE KEY `locationID_UNIQUE` (`locationID`)
+) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `Locations`
+--
+
+LOCK TABLES `Locations` WRITE;
+/*!40000 ALTER TABLE `Locations` DISABLE KEYS */;
+INSERT INTO `Locations` VALUES (1,'USA','AL',NULL),(2,'USA','AK',NULL),(3,'USA','AR',NULL),(4,'USA','AZ',NULL),(5,'USA','CA',NULL),(6,'USA','CO',NULL),(7,'USA','CT',NULL),(8,'USA','DE',NULL),(9,'USA','FL',NULL),(10,'USA','GA',NULL),(11,'USA','HI',NULL),(12,'USA','ID',NULL),(13,'USA','IL',NULL),(14,'USA','IN',NULL),(15,'USA','IA',NULL),(16,'USA','KS',NULL),(17,'USA','KY',NULL),(18,'USA','LA',NULL),(19,'USA','ME',NULL),(20,'USA','MD',NULL),(21,'USA','MA',NULL),(22,'USA','MI',NULL),(23,'USA','MN',NULL),(24,'USA','MS',NULL),(25,'USA','MO',NULL),(26,'USA','MT',NULL),(27,'USA','NE',NULL),(28,'USA','NV',NULL),(29,'USA','NH',NULL),(30,'USA','NJ',NULL),(31,'USA','NM',NULL),(32,'USA','NY',NULL),(33,'USA','NC',NULL),(34,'USA','ND',NULL),(35,'USA','OH',NULL),(36,'USA','OK',NULL),(37,'USA','OR',NULL),(38,'USA','PA',NULL),(39,'USA','RI',NULL),(40,'USA','SC',NULL),(41,'USA','SD',NULL),(42,'USA','TN',NULL),(43,'USA','TX',NULL),(44,'USA','UT',NULL),(45,'USA','VT',NULL),(46,'USA','VA',NULL),(47,'USA','WA',NULL),(48,'USA','WV',NULL),(49,'USA','WI',NULL),(50,'USA','WY',NULL),(51,'USA','DC',NULL),(52,'USA','AS',NULL),(53,'USA','GU',NULL),(54,'USA','MP',NULL),(55,'USA','PR',NULL),(56,'USA','UM',NULL),(57,'USA','VI',NULL);
+/*!40000 ALTER TABLE `Locations` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `Mediums`
 --
 
@@ -163,4 +192,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-18 14:39:45
+-- Dump completed on 2025-04-18 15:43:54
