@@ -42,6 +42,33 @@ INSERT INTO `ArtPeriods` VALUES ('18e','1700','early'),('18l','1700','late'),('1
 UNLOCK TABLES;
 
 --
+-- Table structure for table `ArtistArtworks`
+--
+
+DROP TABLE IF EXISTS `ArtistArtworks`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `ArtistArtworks` (
+  `artistID` int(11) NOT NULL,
+  `artworkID` int(11) NOT NULL,
+  PRIMARY KEY (`artistID`,`artworkID`),
+  KEY `fk_Artists_has_Artworks_Artworks1_idx` (`artworkID`),
+  KEY `fk_Artists_has_Artworks_Artists1_idx` (`artistID`),
+  CONSTRAINT `fk_Artists_has_Artworks_Artists1` FOREIGN KEY (`artistID`) REFERENCES `Artists` (`artistID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_Artists_has_Artworks_Artworks1` FOREIGN KEY (`artworkID`) REFERENCES `Artworks` (`artworkID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `ArtistArtworks`
+--
+
+LOCK TABLES `ArtistArtworks` WRITE;
+/*!40000 ALTER TABLE `ArtistArtworks` DISABLE KEYS */;
+/*!40000 ALTER TABLE `ArtistArtworks` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `Artists`
 --
 
@@ -192,4 +219,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-18 15:43:54
+-- Dump completed on 2025-04-18 16:03:23
