@@ -115,10 +115,13 @@ CREATE TABLE `Artworks` (
   `dateCreated` date NOT NULL,
   `artPeriodCode` varchar(10) NOT NULL,
   `artMediumCode` varchar(25) NOT NULL,
+  `artName` varchar(150) NOT NULL,
   PRIMARY KEY (`artworkID`),
   UNIQUE KEY `artworkID_UNIQUE` (`artworkID`),
   KEY `mediumID_idx` (`artMediumCode`),
   KEY `periodID_idx` (`artPeriodCode`),
+  KEY `artistID_idx` (`artistID`),
+  CONSTRAINT `artistID` FOREIGN KEY (`artistID`) REFERENCES `Artists` (`artistID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `mediumID` FOREIGN KEY (`artMediumCode`) REFERENCES `Mediums` (`mediumID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `periodID` FOREIGN KEY (`artPeriodCode`) REFERENCES `ArtPeriods` (`periodID`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -167,9 +170,9 @@ DROP TABLE IF EXISTS `Locations`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `Locations` (
   `locationID` int(11) NOT NULL AUTO_INCREMENT,
-  `Country` varchar(100) NOT NULL,
-  `State` varchar(5) DEFAULT NULL,
-  `City` varchar(150) DEFAULT NULL,
+  `country` varchar(100) NOT NULL,
+  `state` varchar(5) DEFAULT NULL,
+  `city` varchar(150) DEFAULT NULL,
   PRIMARY KEY (`locationID`),
   UNIQUE KEY `locationID_UNIQUE` (`locationID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -219,4 +222,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-18 16:03:23
+-- Dump completed on 2025-04-21 14:15:52
