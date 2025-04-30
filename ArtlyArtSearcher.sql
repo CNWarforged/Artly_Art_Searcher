@@ -1,3 +1,13 @@
+-- This is our database for our ArtlyArtSearcher project!
+-- The database serves as the backend for an archive of artists and their art.
+-- ArtistArtworks serves as the connection table between Artists and Artworks.
+-- Most of the other tables are category tables to handle the details 
+-- we need for the artists or artworks.
+-- No AI art will be included in our database.
+-- Project Name: Artly Art Searcher
+-- Admins/devs: Allessandra Bakker and Jennifer Phillips
+
+
 -- MySQL dump 10.13  Distrib 8.0.41, for Win64 (x86_64)
 --
 -- Host: classmysql.engr.oregonstate.edu    Database: cs340_phillj26
@@ -14,6 +24,9 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+SET FOREIGN_KEY_CHECKS=0;
+SET AUTOCOMMIT = 0;
 
 --
 -- Table structure for table `ArtPeriods`
@@ -225,3 +238,6 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2025-04-30 15:20:52
+
+SET FOREIGN_KEY_CHECKS=1;
+COMMIT;
