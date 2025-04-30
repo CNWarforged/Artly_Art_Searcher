@@ -49,14 +49,16 @@ DROP TABLE IF EXISTS `ArtistArtworks`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `ArtistArtworks` (
+  `artistArtworkID` int(11) NOT NULL AUTO_INCREMENT,
   `artistID` int(11) NOT NULL,
   `artworkID` int(11) NOT NULL,
-  PRIMARY KEY (`artistID`,`artworkID`),
+  PRIMARY KEY (`artistArtworkID`,`artistID`,`artworkID`),
+  UNIQUE KEY `artistArtworkID_UNIQUE` (`artistArtworkID`),
   KEY `fk_Artists_has_Artworks_Artworks1_idx` (`artworkID`),
   KEY `fk_Artists_has_Artworks_Artists1_idx` (`artistID`),
   CONSTRAINT `fk_Artists_has_Artworks_Artists1` FOREIGN KEY (`artistID`) REFERENCES `Artists` (`artistID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_Artists_has_Artworks_Artworks1` FOREIGN KEY (`artworkID`) REFERENCES `Artworks` (`artworkID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -65,6 +67,7 @@ CREATE TABLE `ArtistArtworks` (
 
 LOCK TABLES `ArtistArtworks` WRITE;
 /*!40000 ALTER TABLE `ArtistArtworks` DISABLE KEYS */;
+INSERT INTO `ArtistArtworks` VALUES (1,1,3),(2,2,1),(3,2,2),(4,3,4),(5,3,5);
 /*!40000 ALTER TABLE `ArtistArtworks` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -89,7 +92,7 @@ CREATE TABLE `Artists` (
   KEY `locationID_idx1` (`birthLocID`),
   CONSTRAINT `genderID` FOREIGN KEY (`genderCode`) REFERENCES `GenderCodes` (`genderID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `locationID` FOREIGN KEY (`residenceLocID`) REFERENCES `Locations` (`locationID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -98,6 +101,7 @@ CREATE TABLE `Artists` (
 
 LOCK TABLES `Artists` WRITE;
 /*!40000 ALTER TABLE `Artists` DISABLE KEYS */;
+INSERT INTO `Artists` VALUES (1,'Michael Whelan','M',NULL,NULL,5),(2,'Vincent Van Gogh','M',NULL,NULL,58),(3,'Frida Kahlo','F',NULL,NULL,59);
 /*!40000 ALTER TABLE `Artists` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -111,7 +115,6 @@ DROP TABLE IF EXISTS `Artworks`;
 CREATE TABLE `Artworks` (
   `artworkID` int(11) NOT NULL AUTO_INCREMENT,
   `digitalArt` tinyint(3) NOT NULL,
-  `artistID` int(11) NOT NULL,
   `dateCreated` date NOT NULL,
   `artPeriodCode` varchar(10) NOT NULL,
   `artMediumCode` varchar(25) NOT NULL,
@@ -120,11 +123,9 @@ CREATE TABLE `Artworks` (
   UNIQUE KEY `artworkID_UNIQUE` (`artworkID`),
   KEY `mediumID_idx` (`artMediumCode`),
   KEY `periodID_idx` (`artPeriodCode`),
-  KEY `artistID_idx` (`artistID`),
-  CONSTRAINT `artistID` FOREIGN KEY (`artistID`) REFERENCES `Artists` (`artistID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `mediumID` FOREIGN KEY (`artMediumCode`) REFERENCES `Mediums` (`mediumID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `periodID` FOREIGN KEY (`artPeriodCode`) REFERENCES `ArtPeriods` (`periodID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -133,6 +134,7 @@ CREATE TABLE `Artworks` (
 
 LOCK TABLES `Artworks` WRITE;
 /*!40000 ALTER TABLE `Artworks` DISABLE KEYS */;
+INSERT INTO `Artworks` VALUES (1,0,'1889-06-01','19l','O','Starry Night'),(2,0,'1888-08-01','19l','O','Vase With Fifteen Sunflowers'),(3,0,'1988-01-01','20l','A','Catspaw'),(4,0,'1939-01-01','20m','O','The Two Fridas'),(5,0,'1944-01-01','20m','O','The Broken Column');
 /*!40000 ALTER TABLE `Artworks` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -175,7 +177,7 @@ CREATE TABLE `Locations` (
   `city` varchar(150) DEFAULT NULL,
   PRIMARY KEY (`locationID`),
   UNIQUE KEY `locationID_UNIQUE` (`locationID`)
-) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -184,7 +186,7 @@ CREATE TABLE `Locations` (
 
 LOCK TABLES `Locations` WRITE;
 /*!40000 ALTER TABLE `Locations` DISABLE KEYS */;
-INSERT INTO `Locations` VALUES (1,'USA','AL',NULL),(2,'USA','AK',NULL),(3,'USA','AR',NULL),(4,'USA','AZ',NULL),(5,'USA','CA',NULL),(6,'USA','CO',NULL),(7,'USA','CT',NULL),(8,'USA','DE',NULL),(9,'USA','FL',NULL),(10,'USA','GA',NULL),(11,'USA','HI',NULL),(12,'USA','ID',NULL),(13,'USA','IL',NULL),(14,'USA','IN',NULL),(15,'USA','IA',NULL),(16,'USA','KS',NULL),(17,'USA','KY',NULL),(18,'USA','LA',NULL),(19,'USA','ME',NULL),(20,'USA','MD',NULL),(21,'USA','MA',NULL),(22,'USA','MI',NULL),(23,'USA','MN',NULL),(24,'USA','MS',NULL),(25,'USA','MO',NULL),(26,'USA','MT',NULL),(27,'USA','NE',NULL),(28,'USA','NV',NULL),(29,'USA','NH',NULL),(30,'USA','NJ',NULL),(31,'USA','NM',NULL),(32,'USA','NY',NULL),(33,'USA','NC',NULL),(34,'USA','ND',NULL),(35,'USA','OH',NULL),(36,'USA','OK',NULL),(37,'USA','OR',NULL),(38,'USA','PA',NULL),(39,'USA','RI',NULL),(40,'USA','SC',NULL),(41,'USA','SD',NULL),(42,'USA','TN',NULL),(43,'USA','TX',NULL),(44,'USA','UT',NULL),(45,'USA','VT',NULL),(46,'USA','VA',NULL),(47,'USA','WA',NULL),(48,'USA','WV',NULL),(49,'USA','WI',NULL),(50,'USA','WY',NULL),(51,'USA','DC',NULL),(52,'USA','AS',NULL),(53,'USA','GU',NULL),(54,'USA','MP',NULL),(55,'USA','PR',NULL),(56,'USA','UM',NULL),(57,'USA','VI',NULL);
+INSERT INTO `Locations` VALUES (1,'USA','AL',NULL),(2,'USA','AK',NULL),(3,'USA','AR',NULL),(4,'USA','AZ',NULL),(5,'USA','CA',NULL),(6,'USA','CO',NULL),(7,'USA','CT',NULL),(8,'USA','DE',NULL),(9,'USA','FL',NULL),(10,'USA','GA',NULL),(11,'USA','HI',NULL),(12,'USA','ID',NULL),(13,'USA','IL',NULL),(14,'USA','IN',NULL),(15,'USA','IA',NULL),(16,'USA','KS',NULL),(17,'USA','KY',NULL),(18,'USA','LA',NULL),(19,'USA','ME',NULL),(20,'USA','MD',NULL),(21,'USA','MA',NULL),(22,'USA','MI',NULL),(23,'USA','MN',NULL),(24,'USA','MS',NULL),(25,'USA','MO',NULL),(26,'USA','MT',NULL),(27,'USA','NE',NULL),(28,'USA','NV',NULL),(29,'USA','NH',NULL),(30,'USA','NJ',NULL),(31,'USA','NM',NULL),(32,'USA','NY',NULL),(33,'USA','NC',NULL),(34,'USA','ND',NULL),(35,'USA','OH',NULL),(36,'USA','OK',NULL),(37,'USA','OR',NULL),(38,'USA','PA',NULL),(39,'USA','RI',NULL),(40,'USA','SC',NULL),(41,'USA','SD',NULL),(42,'USA','TN',NULL),(43,'USA','TX',NULL),(44,'USA','UT',NULL),(45,'USA','VT',NULL),(46,'USA','VA',NULL),(47,'USA','WA',NULL),(48,'USA','WV',NULL),(49,'USA','WI',NULL),(50,'USA','WY',NULL),(51,'USA','DC',NULL),(52,'USA','AS',NULL),(53,'USA','GU',NULL),(54,'USA','MP',NULL),(55,'USA','PR',NULL),(56,'USA','UM',NULL),(57,'USA','VI',NULL),(58,'The Netherlands',NULL,NULL),(59,'Mexico',NULL,'Mexico City');
 /*!40000 ALTER TABLE `Locations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -222,4 +224,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-21 14:15:52
+-- Dump completed on 2025-04-30 15:20:52
