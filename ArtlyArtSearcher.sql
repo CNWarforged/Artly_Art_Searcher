@@ -150,7 +150,7 @@ CREATE TABLE `ArtistArtworks` (
   `artistArtworkID` int(11) NOT NULL AUTO_INCREMENT UNIQUE,
   `artistID` int(11) NOT NULL,
   `artworkID` int(11) NOT NULL,
-  PRIMARY KEY (`artistArtworkID`,`artistID`,`artworkID`),
+  PRIMARY KEY (`artistArtworkID`),
   CONSTRAINT `fkArtists` FOREIGN KEY (`artistID`) REFERENCES `Artists` (`artistID`) ON DELETE CASCADE,
   CONSTRAINT `fkArtworks` FOREIGN KEY (`artworkID`) REFERENCES `Artworks` (`artworkID`) ON DELETE CASCADE
 );
