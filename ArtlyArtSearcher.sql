@@ -11,13 +11,13 @@
 SET FOREIGN_KEY_CHECKS=0;
 SET AUTOCOMMIT = 0;
 
+DROP TABLE IF EXISTS `Mediums`;
+DROP TABLE IF EXISTS `Locations`;
+DROP TABLE IF EXISTS `GenderCodes`;
 DROP TABLE IF EXISTS `ArtPeriods`;
 DROP TABLE IF EXISTS `ArtistArtworks`;
 DROP TABLE IF EXISTS `Artists`;
 DROP TABLE IF EXISTS `Artworks`;
-DROP TABLE IF EXISTS `GenderCodes`;
-DROP TABLE IF EXISTS `Locations`;
-DROP TABLE IF EXISTS `Mediums`;
 
 --
 -- Table: `ArtPeriods`
@@ -27,86 +27,14 @@ DROP TABLE IF EXISTS `Mediums`;
 --
 
 CREATE TABLE `ArtPeriods` (
-  `periodID` varchar(10) NOT NULL,
+  `periodID` varchar(10) NOT NULL UNIQUE,
   `century` varchar(45) NOT NULL,
   `centuryPart` varchar(45) NOT NULL,
-  PRIMARY KEY (`periodID`),
-  UNIQUE KEY `periodID_UNIQUE` (`periodID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  PRIMARY KEY (`periodID`)
+);
 
-LOCK TABLES `ArtPeriods` WRITE;
-INSERT INTO `ArtPeriods` VALUES ('18e','1700','early'),('18l','1700','late'),('18m','1700','mid'),('19e','1800','early'),('19l','1800','late'),('19m','1800','mid'),('20e','1900','early'),('20l','1900','late'),('20m','1900','mid'),('21e','2000','early'),('21l','2000','late'),('21m','2000','mid');
-UNLOCK TABLES;
-
---
--- Table: `ArtistArtworks`
--- Intersection table between Artists and Artworks
---
-
-CREATE TABLE `ArtistArtworks` (
-  `artistArtworkID` int(11) NOT NULL AUTO_INCREMENT,
-  `artistID` int(11) NOT NULL,
-  `artworkID` int(11) NOT NULL,
-  PRIMARY KEY (`artistArtworkID`,`artistID`,`artworkID`),
-  UNIQUE KEY `artistArtworkID_UNIQUE` (`artistArtworkID`),
-  KEY `fk_Artists_has_Artworks_Artworks1_idx` (`artworkID`),
-  KEY `fk_Artists_has_Artworks_Artists1_idx` (`artistID`),
-  CONSTRAINT `fk_Artists_has_Artworks_Artists1` FOREIGN KEY (`artistID`) REFERENCES `Artists` (`artistID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Artists_has_Artworks_Artworks1` FOREIGN KEY (`artworkID`) REFERENCES `Artworks` (`artworkID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-LOCK TABLES `ArtistArtworks` WRITE;
-INSERT INTO `ArtistArtworks` VALUES (1,1,3),(2,2,1),(3,2,2),(4,3,4),(5,3,5);
-UNLOCK TABLES;
-
---
--- Table: `Artists`
--- This holds the names and information of the artists we’re tracking.
---
-
-CREATE TABLE `Artists` (
-  `artistID` int(11) NOT NULL AUTO_INCREMENT,
-  `fullName` varchar(300) NOT NULL,
-  `genderCode` varchar(10) NOT NULL,
-  `queer` tinyint(2) DEFAULT NULL,
-  `residenceLocID` int(11) DEFAULT NULL,
-  `birthLocID` int(11) DEFAULT NULL,
-  PRIMARY KEY (`artistID`),
-  UNIQUE KEY `artistID_UNIQUE` (`artistID`),
-  KEY `genderID_idx` (`genderCode`),
-  KEY `locationID_idx` (`residenceLocID`),
-  KEY `locationID_idx1` (`birthLocID`),
-  CONSTRAINT `genderID` FOREIGN KEY (`genderCode`) REFERENCES `GenderCodes` (`genderID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `locationID` FOREIGN KEY (`residenceLocID`) REFERENCES `Locations` (`locationID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-LOCK TABLES `Artists` WRITE;
-INSERT INTO `Artists` VALUES (1,'Michael Whelan','M',NULL,NULL,5),(2,'Vincent Van Gogh','M',NULL,NULL,58),(3,'Frida Kahlo','F',NULL,NULL,59);
-UNLOCK TABLES;
-
---
--- Table: `Artworks`
--- This table records the names and information of the artworks for the artists we have the search available for.
---
-
-CREATE TABLE `Artworks` (
-  `artworkID` int(11) NOT NULL AUTO_INCREMENT,
-  `digitalArt` tinyint(3) NOT NULL,
-  `dateCreated` date NOT NULL,
-  `artPeriodCode` varchar(10) NOT NULL,
-  `artMediumCode` varchar(25) NOT NULL,
-  `artName` varchar(150) NOT NULL,
-  PRIMARY KEY (`artworkID`),
-  UNIQUE KEY `artworkID_UNIQUE` (`artworkID`),
-  KEY `mediumID_idx` (`artMediumCode`),
-  KEY `periodID_idx` (`artPeriodCode`),
-  CONSTRAINT `mediumID` FOREIGN KEY (`artMediumCode`) REFERENCES `Mediums` (`mediumID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `periodID` FOREIGN KEY (`artPeriodCode`) REFERENCES `ArtPeriods` (`periodID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-LOCK TABLES `Artworks` WRITE;
-INSERT INTO `Artworks` VALUES (1,0,'1889-06-01','19l','O','Starry Night'),(2,0,'1888-08-01','19l','O','Vase With Fifteen Sunflowers'),(3,0,'1988-01-01','20l','A','Catspaw'),(4,0,'1939-01-01','20m','O','The Two Fridas'),(5,0,'1944-01-01','20m','O','The Broken Column');
-UNLOCK TABLES;
+INSERT INTO `ArtPeriods` 
+VALUES ('18e','1700','early'),('18l','1700','late'),('18m','1700','mid'),('19e','1800','early'),('19l','1800','late'),('19m','1800','mid'),('20e','1900','early'),('20l','1900','late'),('20m','1900','mid'),('21e','2000','early'),('21l','2000','late'),('21m','2000','mid');
 
 --
 -- Table: `GenderCodes`
@@ -115,15 +43,27 @@ UNLOCK TABLES;
 --
 
 CREATE TABLE `GenderCodes` (
-  `genderID` varchar(10) NOT NULL,
+  `genderID` varchar(10) NOT NULL UNIQUE,
   `description` varchar(100) NOT NULL,
-  PRIMARY KEY (`genderID`),
-  UNIQUE KEY `genderID_UNIQUE` (`genderID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  PRIMARY KEY (`genderID`)
+);
 
-LOCK TABLES `GenderCodes` WRITE;
-INSERT INTO `GenderCodes` VALUES ('F','Cis Female'),('IS','Intersex'),('M','Cis Male'),('NB','Non-Binary'),('TF','Trans Female'),('TM','Trans Male'),('TS','Two Spirit'),('U','Unknown');
-UNLOCK TABLES;
+INSERT INTO `GenderCodes` 
+VALUES ('F','Cis Female'),('IS','Intersex'),('M','Cis Male'),('NB','Non-Binary'),('TF','Trans Female'),('TM','Trans Male'),('TS','Two Spirit'),('U','Unknown');
+
+--
+-- Table: `Mediums`
+-- These are codes to represent different artistic mediums (like acrylic, oil, photography, mixed media, etc.).
+--
+
+CREATE TABLE `Mediums` (
+  `mediumID` varchar(25) NOT NULL UNIQUE,
+  `mediumDescription` varchar(50) NOT NULL,
+  PRIMARY KEY (`mediumID`)
+);
+
+INSERT INTO `Mediums` 
+VALUES ('A','Acrylic'),('CG','Computer Graphics or Digital Art'),('MM','Mixed Media'),('O','Oil'),('P','Photography');
 
 --
 -- Table: `Locations`
@@ -132,32 +72,72 @@ UNLOCK TABLES;
 --
 
 CREATE TABLE `Locations` (
-  `locationID` int(11) NOT NULL AUTO_INCREMENT,
+  `locationID` int(11) NOT NULL UNIQUE AUTO_INCREMENT,
   `country` varchar(100) NOT NULL,
   `state` varchar(5) DEFAULT NULL,
   `city` varchar(150) DEFAULT NULL,
-  PRIMARY KEY (`locationID`),
-  UNIQUE KEY `locationID_UNIQUE` (`locationID`)
-) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  PRIMARY KEY (`locationID`)
+);
 
-LOCK TABLES `Locations` WRITE;
-INSERT INTO `Locations` VALUES (1,'USA','AL',NULL),(2,'USA','AK',NULL),(3,'USA','AR',NULL),(4,'USA','AZ',NULL),(5,'USA','CA',NULL),(6,'USA','CO',NULL),(7,'USA','CT',NULL),(8,'USA','DE',NULL),(9,'USA','FL',NULL),(10,'USA','GA',NULL),(11,'USA','HI',NULL),(12,'USA','ID',NULL),(13,'USA','IL',NULL),(14,'USA','IN',NULL),(15,'USA','IA',NULL),(16,'USA','KS',NULL),(17,'USA','KY',NULL),(18,'USA','LA',NULL),(19,'USA','ME',NULL),(20,'USA','MD',NULL),(21,'USA','MA',NULL),(22,'USA','MI',NULL),(23,'USA','MN',NULL),(24,'USA','MS',NULL),(25,'USA','MO',NULL),(26,'USA','MT',NULL),(27,'USA','NE',NULL),(28,'USA','NV',NULL),(29,'USA','NH',NULL),(30,'USA','NJ',NULL),(31,'USA','NM',NULL),(32,'USA','NY',NULL),(33,'USA','NC',NULL),(34,'USA','ND',NULL),(35,'USA','OH',NULL),(36,'USA','OK',NULL),(37,'USA','OR',NULL),(38,'USA','PA',NULL),(39,'USA','RI',NULL),(40,'USA','SC',NULL),(41,'USA','SD',NULL),(42,'USA','TN',NULL),(43,'USA','TX',NULL),(44,'USA','UT',NULL),(45,'USA','VT',NULL),(46,'USA','VA',NULL),(47,'USA','WA',NULL),(48,'USA','WV',NULL),(49,'USA','WI',NULL),(50,'USA','WY',NULL),(51,'USA','DC',NULL),(52,'USA','AS',NULL),(53,'USA','GU',NULL),(54,'USA','MP',NULL),(55,'USA','PR',NULL),(56,'USA','UM',NULL),(57,'USA','VI',NULL),(58,'The Netherlands',NULL,NULL),(59,'Mexico',NULL,'Mexico City');
-UNLOCK TABLES;
+INSERT INTO `Locations` 
+VALUES (1,'USA','AL',NULL),(2,'USA','AK',NULL),(3,'USA','AR',NULL),(4,'USA','AZ',NULL),(5,'USA','CA',NULL),(6,'USA','CO',NULL),(7,'USA','CT',NULL),(8,'USA','DE',NULL),(9,'USA','FL',NULL),(10,'USA','GA',NULL),(11,'USA','HI',NULL),(12,'USA','ID',NULL),(13,'USA','IL',NULL),(14,'USA','IN',NULL),(15,'USA','IA',NULL),(16,'USA','KS',NULL),(17,'USA','KY',NULL),(18,'USA','LA',NULL),(19,'USA','ME',NULL),(20,'USA','MD',NULL),(21,'USA','MA',NULL),(22,'USA','MI',NULL),(23,'USA','MN',NULL),(24,'USA','MS',NULL),(25,'USA','MO',NULL),(26,'USA','MT',NULL),(27,'USA','NE',NULL),(28,'USA','NV',NULL),(29,'USA','NH',NULL),(30,'USA','NJ',NULL),(31,'USA','NM',NULL),(32,'USA','NY',NULL),(33,'USA','NC',NULL),(34,'USA','ND',NULL),(35,'USA','OH',NULL),(36,'USA','OK',NULL),(37,'USA','OR',NULL),(38,'USA','PA',NULL),(39,'USA','RI',NULL),(40,'USA','SC',NULL),(41,'USA','SD',NULL),(42,'USA','TN',NULL),(43,'USA','TX',NULL),(44,'USA','UT',NULL),(45,'USA','VT',NULL),(46,'USA','VA',NULL),(47,'USA','WA',NULL),(48,'USA','WV',NULL),(49,'USA','WI',NULL),(50,'USA','WY',NULL),(51,'USA','DC',NULL),(52,'USA','AS',NULL),(53,'USA','GU',NULL),(54,'USA','MP',NULL),(55,'USA','PR',NULL),(56,'USA','UM',NULL),(57,'USA','VI',NULL),(58,'The Netherlands',NULL,NULL),(59,'Mexico',NULL,'Mexico City');
 
 --
--- Table: `Mediums`
--- These are codes to represent different artistic mediums (like acrylic, oil, photography, mixed media, etc.).
+-- Table: `Artists`
+-- This holds the names and information of the artists we’re tracking.
 --
 
-CREATE TABLE `Mediums` (
-  `mediumID` varchar(25) NOT NULL,
-  `mediumDescription` varchar(50) NOT NULL,
-  PRIMARY KEY (`mediumID`),
-  UNIQUE KEY `mediumID_UNIQUE` (`mediumID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+CREATE TABLE `Artists` (
+  `artistID` int(11) NOT NULL AUTO_INCREMENT UNIQUE,
+  `fullName` varchar(300) NOT NULL,
+  `genderCode` varchar(10) NOT NULL,
+  `queer` tinyint(2) DEFAULT NULL,
+  `residenceLocID` int(11) DEFAULT NULL,
+  `birthLocID` int(11) DEFAULT NULL,
+  PRIMARY KEY (`artistID`),
+  CONSTRAINT `genderID` FOREIGN KEY (`genderCode`) REFERENCES `GenderCodes` (`genderID`) ON DELETE CASCADE,
+  CONSTRAINT `locationID` FOREIGN KEY (`residenceLocID`) REFERENCES `Locations` (`locationID`) ON DELETE CASCADE
+);
 
-LOCK TABLES `Mediums` WRITE;INSERT INTO `Mediums` VALUES ('A','Acrylic'),('CG','Computer Graphics or Digital Art'),('MM','Mixed Media'),('O','Oil'),('P','Photography');
-UNLOCK TABLES;
+INSERT INTO `Artists` 
+VALUES (1,'Michael Whelan','M',NULL,NULL,5),(2,'Vincent Van Gogh','M',NULL,NULL,58),(3,'Frida Kahlo','F',NULL,NULL,59);
+
+--
+-- Table: `Artworks`
+-- This table records the names and information of the artworks for the artists we have the search available for.
+--
+
+CREATE TABLE `Artworks` (
+  `artworkID` int(11) NOT NULL AUTO_INCREMENT UNIQUE,
+  `digitalArt` tinyint(3) NOT NULL,
+  `dateCreated` date NOT NULL,
+  `artPeriodCode` varchar(10) NOT NULL,
+  `artMediumCode` varchar(25) NOT NULL,
+  `artName` varchar(150) NOT NULL,
+  PRIMARY KEY (`artworkID`),
+  CONSTRAINT `mediumID` FOREIGN KEY (`artMediumCode`) REFERENCES `Mediums` (`mediumID`) ON DELETE CASCADE,
+  CONSTRAINT `periodID` FOREIGN KEY (`artPeriodCode`) REFERENCES `ArtPeriods` (`periodID`) ON DELETE CASCADE
+);
+
+INSERT INTO `Artworks` 
+VALUES (1,0,'1889-06-01','19l','O','Starry Night'),(2,0,'1888-08-01','19l','O','Vase With Fifteen Sunflowers'),(3,0,'1988-01-01','20l','A','Catspaw'),(4,0,'1939-01-01','20m','O','The Two Fridas'),(5,0,'1944-01-01','20m','O','The Broken Column');
+
+--
+-- Table: `ArtistArtworks`
+-- Intersection table between Artists and Artworks
+--
+
+CREATE TABLE `ArtistArtworks` (
+  `artistArtworkID` int(11) NOT NULL AUTO_INCREMENT UNIQUE,
+  `artistID` int(11) NOT NULL,
+  `artworkID` int(11) NOT NULL,
+  PRIMARY KEY (`artistArtworkID`,`artistID`,`artworkID`),
+  CONSTRAINT `fkArtists` FOREIGN KEY (`artistID`) REFERENCES `Artists` (`artistID`) ON DELETE CASCADE,
+  CONSTRAINT `fkArtworks` FOREIGN KEY (`artworkID`) REFERENCES `Artworks` (`artworkID`) ON DELETE CASCADE
+);
+
+INSERT INTO `ArtistArtworks` 
+VALUES (1,1,3),(2,2,1),(3,2,2),(4,3,4),(5,3,5);
 
 SET FOREIGN_KEY_CHECKS=1;
 COMMIT;
