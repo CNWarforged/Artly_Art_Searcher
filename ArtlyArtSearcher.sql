@@ -11,9 +11,9 @@
 SET FOREIGN_KEY_CHECKS=0;
 SET AUTOCOMMIT = 0;
 
-DROP TABLE IF EXISTS `Mediums`;
 DROP TABLE IF EXISTS `Locations`;
 DROP TABLE IF EXISTS `GenderCodes`;
+DROP TABLE IF EXISTS `Mediums`;
 DROP TABLE IF EXISTS `ArtPeriods`;
 DROP TABLE IF EXISTS `ArtistArtworks`;
 DROP TABLE IF EXISTS `Artists`;
@@ -108,7 +108,7 @@ CREATE TABLE `Artists` (
   `birthLocID` int(11) DEFAULT NULL,
   PRIMARY KEY (`artistID`),
   CONSTRAINT `genderID` FOREIGN KEY (`genderCode`) REFERENCES `GenderCodes` (`genderID`) ON DELETE CASCADE,
-  CONSTRAINT `resLocID` FOREIGN KEY (`residenceLocID`) REFERENCES `Locations` (`locationID`) ON DELETE CASCADE
+  CONSTRAINT `resLocID` FOREIGN KEY (`residenceLocID`) REFERENCES `Locations` (`locationID`) ON DELETE CASCADE,
   CONSTRAINT `birthLocID` FOREIGN KEY (`birthLocID`) REFERENCES `Locations` (`locationID`) ON DELETE CASCADE
 );
 
