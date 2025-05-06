@@ -108,7 +108,8 @@ CREATE TABLE `Artists` (
   `birthLocID` int(11) DEFAULT NULL,
   PRIMARY KEY (`artistID`),
   CONSTRAINT `genderID` FOREIGN KEY (`genderCode`) REFERENCES `GenderCodes` (`genderID`) ON DELETE CASCADE,
-  CONSTRAINT `locationID` FOREIGN KEY (`residenceLocID`) REFERENCES `Locations` (`locationID`) ON DELETE CASCADE
+  CONSTRAINT `resLocID` FOREIGN KEY (`residenceLocID`) REFERENCES `Locations` (`locationID`) ON DELETE CASCADE
+  CONSTRAINT `birthLocID` FOREIGN KEY (`birthLocID`) REFERENCES `Locations` (`locationID`) ON DELETE CASCADE
 );
 
 INSERT INTO `Artists` 
