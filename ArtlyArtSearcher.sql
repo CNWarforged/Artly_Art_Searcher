@@ -34,7 +34,8 @@ CREATE TABLE `ArtPeriods` (
 );
 
 INSERT INTO `ArtPeriods` 
-VALUES ('18e','1700','early'),('18l','1700','late'),('18m','1700','mid'),('19e','1800','early'),('19l','1800','late'),('19m','1800','mid'),('20e','1900','early'),('20l','1900','late'),('20m','1900','mid'),('21e','2000','early'),('21l','2000','late'),('21m','2000','mid');
+VALUES ('18e','1700','early'),('18l','1700','late'),('18m','1700','mid'),('19e','1800','early'),('19l','1800','late'),('19m','1800','mid'),
+('20e','1900','early'),('20l','1900','late'),('20m','1900','mid'),('21e','2000','early'),('21l','2000','late'),('21m','2000','mid');
 
 --
 -- Table: `GenderCodes`
@@ -49,7 +50,14 @@ CREATE TABLE `GenderCodes` (
 );
 
 INSERT INTO `GenderCodes` 
-VALUES ('F','Cis Female'),('IS','Intersex'),('M','Cis Male'),('NB','Non-Binary'),('TF','Trans Female'),('TM','Trans Male'),('TS','Two Spirit'),('U','Unknown');
+VALUES ('F','Cis Female'),
+('IS','Intersex'),
+('M','Cis Male'),
+('NB','Non-Binary'),
+('TF','Trans Female'),
+('TM','Trans Male'),
+('TS','Two Spirit'),
+('U','Unknown');
 
 --
 -- Table: `Mediums`
@@ -63,7 +71,11 @@ CREATE TABLE `Mediums` (
 );
 
 INSERT INTO `Mediums` 
-VALUES ('A','Acrylic'),('CG','Computer Graphics or Digital Art'),('MM','Mixed Media'),('O','Oil'),('P','Photography');
+VALUES ('A','Acrylic'),
+('CG','Computer Graphics or Digital Art'),
+('MM','Mixed Media'),
+('O','Oil'),
+('P','Photography');
 
 --
 -- Table: `Locations`
@@ -100,7 +112,9 @@ CREATE TABLE `Artists` (
 );
 
 INSERT INTO `Artists` 
-VALUES (1,'Michael Whelan','M',NULL,NULL,5),(2,'Vincent Van Gogh','M',NULL,NULL,58),(3,'Frida Kahlo','F',NULL,NULL,59);
+VALUES (1,'Michael Whelan','M',NULL,NULL,5),
+(2,'Vincent Van Gogh','M',NULL,NULL,58),
+(3,'Frida Kahlo','F',NULL,NULL,59);
 
 --
 -- Table: `Artworks`
@@ -120,7 +134,11 @@ CREATE TABLE `Artworks` (
 );
 
 INSERT INTO `Artworks` 
-VALUES (1,0,'1889-06-01','19l','O','Starry Night'),(2,0,'1888-08-01','19l','O','Vase With Fifteen Sunflowers'),(3,0,'1988-01-01','20l','A','Catspaw'),(4,0,'1939-01-01','20m','O','The Two Fridas'),(5,0,'1944-01-01','20m','O','The Broken Column');
+VALUES (1,0,'1889-06-01','19l','O','Starry Night'),
+(2,0,'1888-08-01','19l','O','Vase With Fifteen Sunflowers'),
+(3,0,'1988-01-01','20l','A','Catspaw'),
+(4,0,'1939-01-01','20m','O','The Two Fridas'),
+(5,0,'1944-01-01','20m','O','The Broken Column');
 
 --
 -- Table: `ArtistArtworks`
@@ -136,8 +154,12 @@ CREATE TABLE `ArtistArtworks` (
   CONSTRAINT `fkArtworks` FOREIGN KEY (`artworkID`) REFERENCES `Artworks` (`artworkID`) ON DELETE CASCADE
 );
 
-INSERT INTO `ArtistArtworks` 
-VALUES (1,1,3),(2,2,1),(3,2,2),(4,3,4),(5,3,5);
+INSERT INTO ArtistArtworks (artistID, artworkID) 
+VALUES ((SELECT artistID FROM Artists WHERE fullName = "Michael Whelan"), (SELECT artworkID FROM Artworks WHERE artName = "Catspaw")), 
+((SELECT artistID FROM Artists WHERE fullName = "Vincent Van Gogh"), (SELECT artworkID FROM Artworks WHERE artName = "Starry Night")), 
+((SELECT artistID FROM Artists WHERE fullName = "Vincent Van Gogh"), (SELECT artworkID FROM Artworks WHERE artName = "Vase With Fifteen Sunflowers")), 
+((SELECT artistID FROM Artists WHERE fullName = "Frida Kahlo"), (SELECT artworkID FROM Artworks WHERE artName = "The Two Fridas")), 
+((SELECT artistID FROM Artists WHERE fullName = "Frida Kahlo"), (SELECT artworkID FROM Artworks WHERE artName = "The Broken Column"));
 
 SET FOREIGN_KEY_CHECKS=1;
 COMMIT;
