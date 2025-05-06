@@ -113,9 +113,9 @@ CREATE TABLE `Artists` (
 );
 
 INSERT INTO `Artists` 
-VALUES (1,'Michael Whelan','M',NULL,NULL,5),
-(2,'Vincent Van Gogh','M',NULL,NULL,58),
-(3,'Frida Kahlo','F',NULL,NULL,59);
+VALUES (1,'Michael Whelan','M',NULL,NULL,(SELECT locationID FROM Locations WHERE state = "CA")),
+(2,'Vincent Van Gogh','M',NULL,NULL,(SELECT locationID FROM Locations WHERE city = "Mexico City")),
+(3,'Frida Kahlo','F',NULL,NULL,(SELECT locationID FROM Locations WHERE city = "Mexico City"));
 
 --
 -- Table: `Artworks`
