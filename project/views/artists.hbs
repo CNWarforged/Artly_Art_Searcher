@@ -1,0 +1,108 @@
+<h1>Artists</h1>
+
+{{! READ table }}
+<table>
+    <thead>
+        {{! For the table header row, we print the DB attribute names }}
+        <tr>
+            {{#each Artists.[0]}}
+            <th>
+                {{@key}}
+            </th>
+            {{/each}}
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {{! For each row, print the id, name, gender, sexuality, birth and res id }}
+        {{#each Artists}}
+        <tr>
+            <td>{{this.artistID}}</td>
+            <td>{{this.Name}}</td>
+            <td>{{this.Gender}}</td>
+            <td>{{this.Queer}}</td>
+            <td>{{this.ResidenceID}}</td>
+            <td>{{this.BirthplaceID}}</td>
+            <td>{{this.Country}}</td>
+            <td>{{this.State}}</td>
+
+            {{! DELETE form }}
+            <form id='delete_artist_form'>
+                <input type='hidden' name='delete_arist_id' value='{{this.artistID}}' />
+                <input type='hidden' name='delete_artist_name' value='{{this.fullName}}' />
+                <td>
+                    <button type='submit'>
+                        Delete
+                    </button>
+                </td>
+            </form>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+{{! CREATE form }}
+<h2>Add a New Artist</h2>
+<form class='cuForm' id='create_artist_form'>
+    <label for='create_artist_fullname'>Full Name: </label>
+    <input type='text' name='create_artist_fullname' id='create_artist_fullname' required />
+
+    <label for='create_artist_gender'>Gender Code: </label>
+    <input type='text' name='create_artist_gender' id='create_artist_gender' />
+
+    <label for='create_artist_queer'>Queer? (0/1):</label>
+    <input type='number' name='create_artist_queer' id='create_artist_queer' min='0' max='1' />
+
+    <label for='create_artist_birth_loc'>Birth Location: </label>
+    <select name='create_artist_birth_loc' id='create_artist_birth_loc'>
+        <option value='NULL' selected>Select a Location</option>
+        <option value='NULL'>&lt; None &gt;</option>
+        {{#each Locations}}
+        <option value='{{this.country}}'>{{this.state}}</option>
+        {{/each}}
+    </select>
+
+     <label for='create_artist_birth_loc'>Main Residence Location: </label>
+    <select name='create_artist_birth_loc' id='create_artist_birth_loc'>
+        <option value='NULL' selected>Select a Location</option>
+        <option value='NULL'>&lt; None &gt;</option>
+        {{#each Locations}}
+        <option value='{{this.country}}'>{{this.state}}</option>
+        {{/each}}
+    </select>
+
+    <input type='submit' />
+</form>
+
+{{! UPDATE form }}
+<h2>Update an Artist</h2>
+<form class='cuForm' id='update_artist_form'>
+    <label for='update_artist_id'>Artist to Update: </label>
+    <select name='update_artist_id' id='update_artist_id' required>
+        <option value='' disabled selected>Select an Artist</option>
+        {{#each Artists}}
+        <option value='{{this.artistID}}' required>
+            {{this.artistID}}
+            -
+            {{this.fullName}}
+        </option>
+        {{/each}}
+    </select>
+
+    <label for='update_artist_location'>Artist Main Residence: </label>
+    <select name='update_artist_location' id='update_artist_location'>
+        <option value='NULL' disabled selected>Select a Location</option>
+        <option value='NULL'>&lt; None &gt;</option>
+        {{#each Locations}}
+        <option value='{{this.country}}' required>
+            {{this.state}}
+        </option>
+        {{/each}}
+    </select>
+
+    <label for='update_artist_gender'>Gender Code: </label>
+    <input type='text' name='update_artist_gender' id='update_artist_gender' />
+
+    <input type='submit' />
+</form>
