@@ -8,3 +8,6 @@ Adobe Colors was used to create a color theme for our website. Source: https://c
 Used For: We used Van Gogh's Sunflowers to sample colors for the theme and used the hex code colors provided by Adobe for our web page.
 Date: 5/6/2025
 
+Background image for our website is Van Gogh's Sunflowers.
+Used for: Background image and color theme
+Date: 5/6/2025
