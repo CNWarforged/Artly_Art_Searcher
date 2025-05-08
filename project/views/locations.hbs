@@ -1,0 +1,81 @@
+<h1>Locations</h1>
+
+{{! READ table }}
+<table>
+    <thead>
+        {{! For the table header row, we print the DB attribute names }}
+        <tr>
+            {{#each Locations.[0]}}
+            <th>
+                {{@key}}
+            </th>
+            {{/each}}
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {{! For each row, print the id, name, gender, sexuality, birth and res id }}
+        {{#each Locations}}
+        <tr>
+            <td>{{this.locationID}}</td>
+            <td>{{this.country}}</td>
+            <td>{{this.state}}</td>
+            <td>{{this.city}}</td>
+
+            {{! DELETE form }}
+            <form id='delete_location_form'>
+                <input type='hidden' name='delete_locationt_id' value='{{this.locationID}}' />
+                <input type='hidden' name='delete_location_name' value='{{this.country}}' />
+                <td>
+                    <button type='submit'>
+                        Delete
+                    </button>
+                </td>
+            </form>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+{{! CREATE form }}
+<h2>Add a New Location</h2>
+<form class='cuForm' id='create_location_form'>
+    <label for='create_location_country'>Country: </label>
+    <input type='text' name='create_location_country' id='create_location_country' required />
+
+    <label for='create_location_state'>State: </label>
+    <input type='text' name='create_location_state' id='create_location_state' />
+
+    <label for='create_location_city'>City: </label>
+    <input type='text' name='create_location_city' id='create_location_city' />
+
+    <input type='submit' />
+</form>
+
+{{! UPDATE form }}
+<h2>Update a Location</h2>
+<form class='cuForm' id='update_location_form'>
+    <label for='update_location_id'>Location to Update: </label>
+    <select name='update_location_id' id='update_location_id' required>
+        <option value='' disabled selected>Select a Location</option>
+        {{#each Locations}}
+        <option value='{{this.locationID}}' required>
+            {{this.locationID}}
+            -
+            {{this.country}}
+        </option>
+        {{/each}}
+    </select>
+
+    <label for='update_location_country'>Country: </label>
+    <input type='text' name='update_location_country' id='update_location_country' />
+
+    <label for='update_location_state'>State: </label>
+    <input type='text' name='update_location_state' id='update_location_state' />
+
+    <label for='update_location_city'>City: </label>
+    <input type='text' name='update_location_city' id='update_location_city' />
+
+    <input type='submit' />
+</form>

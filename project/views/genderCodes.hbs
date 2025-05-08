@@ -1,0 +1,66 @@
+<h1>Gender Codes</h1>
+
+{{! READ table }}
+<table>
+    <thead>
+        {{! For the table header row, we print the DB attribute names }}
+        <tr>
+            {{#each GenderCodes.[0]}}
+            <th>
+                {{@key}}
+            </th>
+            {{/each}}
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {{! For each row, print the id and description }}
+        {{#each GenderCodes}}
+        <tr>
+            <td>{{this.genderID}}</td>
+            <td>{{this.description}}</td>
+        
+            {{! DELETE form }}
+            <form id='delete_gender_form'>
+                <input type='hidden' name='delete_gender_id' value='{{this.genderID}}' />
+                <td>
+                    <button type='submit'>
+                        Delete
+                    </button>
+                </td>
+            </form>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+{{! CREATE form }}
+<h2>Add a New Gender</h2>
+<form class='cuForm' id='create_gender_form'>
+    <label for='create_gender_description'>Gender Description: </label>
+    <input type='text' name='create_gender_description' id='create_gender_description' required />
+
+    <input type='submit' />
+</form>
+
+{{! UPDATE form }}
+<h2>Update a Gender</h2>
+<form class='cuForm' id='update_gender_form'>
+    <label for='update_gender_id'>Gender to Update: </label>
+    <select name='update_gender_id' id='update_gender_id' required>
+        <option value='' disabled selected>Select a Gender</option>
+        {{#each GenderCodes}}
+        <option value='{{this.genderID}}' required>
+            {{this.genderID}}
+            -
+            {{this.fullName}} {{! What do I put here??}}
+        </option>
+        {{/each}}
+    </select>
+
+    <label for='update_gender_description'>Gender Description: </label>
+    <input type='text' name='update_gender_description' id='update_gender_description' />
+
+    <input type='submit' />
+</form>

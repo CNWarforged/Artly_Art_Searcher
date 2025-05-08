@@ -22,8 +22,8 @@
   }
 
   body {      
-    background-color: var(seed-brown);
-    background-image: url(/src/assets/van-gogh-sunflowers.png);
+    background-color: var(--yellow-gray);
+    background-image: url(src/assets/van-gogh-sunflowers.png);
     background-repeat: no-repeat, transparent;
     background-size: cover;
     background-attachment: fixed;

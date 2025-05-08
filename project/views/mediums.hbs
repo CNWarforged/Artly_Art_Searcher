@@ -1,0 +1,67 @@
+<h1>Mediums</h1>
+
+{{! READ table }}
+<table>
+    <thead>
+        {{! For the table header row, we print the DB attribute names }}
+        <tr>
+            {{#each Mediums.[0]}}
+            <th>
+                {{@key}}
+            </th>
+            {{/each}}
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {{! For each row, print the id, name, gender, sexuality, birth and res id }}
+        {{#each Mediums}}
+        <tr>
+            <td>{{this.mediumID}}</td>
+            <td>{{this.mediumDescription}}</td>
+
+            {{! DELETE form }}
+            <form id='delete_medium_form'>
+                <input type='hidden' name='delete_medium_id' value='{{this.mediumID}}' />
+                <input type='hidden' name='delete_medium_name' value='{{this.mediumDescription}}' />
+                <td>
+                    <button type='submit'>
+                        Delete
+                    </button>
+                </td>
+            </form>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+{{! CREATE form }}
+<h2>Add a New Medium</h2>
+<form class='cuForm' id='create_medium_form'>
+    <label for='create_medium_description'>Description: </label>
+    <input type='text' name='create_medium_description' id='create_medium_description' required />
+
+    <input type='submit' />
+</form>
+
+{{! UPDATE form }}
+<h2>Update a Medium</h2>
+<form class='cuForm' id='update_medium_form'>
+    <label for='update_medium_id'>Medium to Update: </label>
+    <select name='update_medium_id' id='update_medium_id' required>
+        <option value='' disabled selected>Select an Artist</option>
+        {{#each Mediums}}
+        <option value='{{this.mediumID}}' required>
+            {{this.mediumID}}
+            -
+            {{this.mediumDescription}}
+        </option>
+        {{/each}}
+    </select>
+
+    <label for='update_medium_description'>Description: </label>
+    <input type='text' name='update_medium_description' id='update_medium_description' />
+
+    <input type='submit' />
+</form>

@@ -1,0 +1,110 @@
+<h1>Artworks</h1>
+
+{{! READ table }}
+<table>
+    <thead>
+        {{! For the table header row, we print the DB attribute names }}
+        <tr>
+            {{#each Artworks.[0]}}
+            <th>
+                {{@key}}
+            </th>
+            {{/each}}
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {{! For each row, print the id, digital art, date it was created, art period code, art medium code, and art name }}
+        {{#each Artworks}}
+        <tr>
+            <td>{{this.artworkID}}</td>
+            <td>{{this.digitalArt}}</td>
+            <td>{{this.dateCreated}}</td>
+            <td>{{this.artPeriodCode}}</td>
+            <td>{{this.artMediumCode}}</td>
+            <td>{{this.artName}}</td>
+            <td>{{this.mediumID}}</td>
+            <td>{{this.mediumDescription}}</td>
+    
+            {{! DELETE form }}
+            <form id='delete_artwork_form'>
+                <input type='hidden' name='delete_artwork_id' value='{{this.artworkID}}' />
+                <input type='hidden' name='delete_artwork_name' value='{{this.artName}}' />
+                <td>
+                    <button type='submit'>
+                        Delete
+                    </button>
+                </td>
+            </form>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>
+
+{{! CREATE form }}
+<h2>Add a New Artwork</h2>
+<form class='cuForm' id='create_artwork_form'>
+    <label for='create_artwork_digitalArt'>Digital Art? (0/1): </label>
+    <input type='number' name='create_artwork_digitalArt' id='create_artwork_digitalArt' min='0' max='1' />
+
+    <label for='create_artwork_dateCreated'>Date of Creation: </label>
+    <input type='date' name='create_artwork_dateCreated' id='create_artwork_dateCreated' />
+
+{{! I wasnt sure how to do artPeriodCode}}
+    <label for='create_artwork_artPeriodCode'>Art Period Code:</label>
+    <input type='number' name='create_artwork_artPeriodCode' id='create_artwork_artPeriodCode' />
+
+    
+    <label for='create_artwork_artMediumCode'>Art Medium Code: </label>
+    <select name='create_artwork_artMediumCode' id='create_artwork_artMediumCode'>
+        <option value='NULL' selected>Select a Medium</option>
+        <option value='NULL'>&lt; None &gt;</option>
+        {{#each Mediums}}
+        <option value='{{this.mediumID}}'>{{this.mediumDescription}}</option>
+        {{/each}}
+    </select>
+
+    <label for='create_artwork_name'>Artwork Name: </label>
+    <input type='text' name='create_artwork_name' id='create_artwork_name' />
+
+    <input type='submit' />
+</form>
+
+{{! UPDATE form }}
+<h2>Update an Artwork</h2>
+<form class='cuForm' id='update_artwork_form'>
+    <label for='update_artwork_id'>Artwork to Update: </label>
+    <select name='update_artwork_id' id='update_artwork_id' required>
+        <option value='' disabled selected>Select an Artwork</option>
+        {{#each Artworks}}
+        <option value='{{this.artworkID}}' required>
+            {{this.artworkID}}
+            -
+            {{this.artName}}
+        </option>
+        {{/each}}
+    </select>
+
+    <label for='update_artwork_artMediumCode'>Art Medium Code: </label>
+    <select name='update_artwork_artMediumCode' id='update_artwork_artMediumCode'>
+        <option value='NULL' selected>Select a Medium</option>
+        <option value='NULL'>&lt; None &gt;</option>
+        {{#each Mediums}}
+        <option value='{{this.mediumID}}' required>
+            {{this.mediumDEscription}}
+        </option>
+        {{/each}}
+    </select>
+
+    <label for='update_artwork_name'>Artwork Name: </label>
+    <input type='text' name='update_artwork_name' id='update_artwork_name' />
+
+    <label for='update_artwork_dateCreated'>Date of Creation: </label>
+    <input type='date' name='update_artwork_dateCreated' id='update_artwork_dateCreated' />
+
+    <label for='update_artwork_digitalArt'>Digital Art: </label>
+    <input type='number' name='create_artwork_digitalArt' id='create_artwork_digitalArt' />
+
+    <input type='submit' />
+</form>
