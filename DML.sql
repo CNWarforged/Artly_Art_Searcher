@@ -10,7 +10,16 @@ SELECT Artists.artistID, Artists.fullName AS 'Name', Artists.genderCode AS 'Gend
 
 -- Query 2 for the Artists table
 -- Get all locations from the Locations table to fill in the locations drop downs for the update tables
-SELECT * FROM Locations;';
+SELECT * FROM Locations;
 
 
 
+-- DELETE
+-- delete their artworks first
+DELETE FROM Artworks WHERE artworkID = SELECT (artworkID FROM ArtistArtworks WHERE artistID = @delete_artist_id)
+
+-- Then delete the artist/artwork connection
+DELETE FROM ArtistArtworks WHERE artistID = @delete_artist_id
+
+-- Finally delete the artist
+DELETE FROM Artists WHERE artistID = @delete_artist_id
