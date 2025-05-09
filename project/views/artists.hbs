@@ -31,7 +31,7 @@
 
             {{! DELETE form }}
             <form id='delete_artist_form'>
-                <input type='hidden' name='delete_arist_id' value='{{this.artistID}}' />
+                <input type='hidden' name='delete_artist_id' value='{{this.artistID}}' />
                 <input type='hidden' name='delete_artist_name' value='{{this.fullName}}' />
                 <td>
                     <button type='submit'>
@@ -65,8 +65,8 @@
         {{/each}}
     </select>
 
-     <label for='create_artist_birth_loc'>Main Residence Location: </label>
-    <select name='create_artist_birth_loc' id='create_artist_birth_loc'>
+     <label for='create_artist_res_loc'>Main Residence Location: </label>
+    <select name='create_artist_res_loc' id='create_artist_res_loc'>
         <option value='NULL' selected>Select a Location</option>
         <option value='NULL'>&lt; None &gt;</option>
         {{#each Locations}}
@@ -87,13 +87,13 @@
         <option value='{{this.artistID}}' required>
             {{this.artistID}}
             -
-            {{this.fullName}}
+            {{this.Name}}
         </option>
         {{/each}}
     </select>
 
-    <label for='update_artist_location'>Artist Main Residence: </label>
-    <select name='update_artist_location' id='update_artist_location'>
+    <label for='update_artist_birth_location'>Artist Main Residence: </label>
+    <select name='update_artist_birth_location' id='update_artist_birth_location'>
         <option value='NULL' disabled selected>Select a Location</option>
         <option value='NULL'>&lt; None &gt;</option>
         {{#each Locations}}
@@ -102,6 +102,20 @@
         </option>
         {{/each}}
     </select>
+
+    <label for='update_artist_res_location'>Artist Main Residence: </label>
+    <select name='update_artist_res_location' id='update_artist_res_location'>
+        <option value='NULL' disabled selected>Select a Location</option>
+        <option value='NULL'>&lt; None &gt;</option>
+        {{#each Locations}}
+        <option value='{{this.country}}' required>
+            {{this.state}}
+        </option>
+        {{/each}}
+    </select>
+
+    <label for='update_artist_name'>Gender Code: </label>
+    <input type='text' name='update_artist_name' id='update_artist_name' />
 
     <label for='update_artist_gender'>Gender Code: </label>
     <input type='text' name='update_artist_gender' id='update_artist_gender' />
