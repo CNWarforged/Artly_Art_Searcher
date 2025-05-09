@@ -58,6 +58,112 @@ app.get('/artists', async function (req, res) {
     }
 });
 
+app.get('/artperiods', async function (req, res) {
+    try {
+        // Create and execute our queries
+        const query1 = `SELECT periodID AS 'PeriodID', century AS 'Century', \
+            centuryPart AS 'CenturyPart' FROM ArtPeriods`;
+        const [ArtPeriods] = await db.query(query1);
+
+        // Render the artperiods.hbs file, and also send the renderer
+        //  an object that contains our art periods
+        res.render('artperiods', { ArtPeriods: ArtPeriods });
+    } catch (error) {
+        console.error('Error executing queries:', error);
+        // Send a generic error message to the browser
+        res.status(500).send(
+            'An error occurred while executing the database queries.'
+        );
+    }
+});
+
+app.get('/artworks', async function (req, res) {
+    try {
+        // Create and execute our queries
+        // In query1, we use a JOIN clause to display the name of the artist
+        const query1 = `SELECT Artworks.artworkID, Artworks.digitalArt AS 'DigitalArt', \
+            DATE_FORMAT(Artworks.dateCreated, '%Y-%m-%d') AS 'Date', Artworks.artPeriodCode AS 'PeriodCode', \
+            Artworks.artMediumCode AS 'Medium', Artworks.artName AS 'ArtworkName', \
+            Artists.fullName AS 'ArtistName' \
+            FROM Artworks \
+            JOIN Artists ON Artists.artistID = (SELECT artistID FROM ArtistArtworks \
+            WHERE ArtistArtworks.artworkID = Artworks.artworkID);`;
+        const query2 = 'SELECT * FROM ArtPeriods;';
+        const query3 = 'SELECT * FROM Mediums;';
+        const [Artworks] = await db.query(query1);
+        const [ArtPeriods] = await db.query(query2);
+        const [Mediums] = await db.query(query3);
+
+        // Render the artworks.hbs file, and also send the renderer
+        // an object that contains our artworks and periods and medium information
+        res.render('artworks', { Artworks: Artworks, ArtPeriods: ArtPeriods, Mediums: Mediums });
+    } catch (error) {
+        console.error('Error executing queries:', error);
+        // Send a generic error message to the browser
+        res.status(500).send(
+            'An error occurred while executing the database queries.'
+        );
+    }
+});
+
+app.get('/locations', async function (req, res) {
+    try {
+        // Create and execute our queries
+        const query1 = `SELECT locationID, country AS 'Country', \
+            state AS 'State', city AS 'City' \
+            FROM Locations`;
+        const [Locations] = await db.query(query1);
+
+        // Render the locations.hbs file, and also send the renderer
+        //  an object that contains our locations
+        res.render('locations', { Locations: Locations });
+    } catch (error) {
+        console.error('Error executing queries:', error);
+        // Send a generic error message to the browser
+        res.status(500).send(
+            'An error occurred while executing the database queries.'
+        );
+    }
+});
+
+app.get('/gendercodes', async function (req, res) {
+    try {
+        // Create and execute our queries
+        const query1 = `SELECT genderID, description AS 'Description' \
+            FROM GenderCodes`;
+        const [GenderCodes] = await db.query(query1);
+
+        // Render the gendercodes.hbs file, and also send the renderer
+        //  an object that contains our gender codes
+        res.render('gendercodes', { GenderCodes: GenderCodes });
+    } catch (error) {
+        console.error('Error executing queries:', error);
+        // Send a generic error message to the browser
+        res.status(500).send(
+            'An error occurred while executing the database queries.'
+        );
+    }
+});
+
+app.get('/mediums', async function (req, res) {
+    try {
+        // Create and execute our queries
+        const query1 = `SELECT mediumID, mediumDescription AS 'Description' \
+            FROM Mediums`;
+        const [Mediums] = await db.query(query1);
+
+        // Render the mediums.hbs file, and also send the renderer
+        //  an object that contains our medium codes
+        res.render('mediums', { Mediums: Mediums });
+    } catch (error) {
+        console.error('Error executing queries:', error);
+        // Send a generic error message to the browser
+        res.status(500).send(
+            'An error occurred while executing the database queries.'
+        );
+    }
+});
+
 // ########################################
 // ########## LISTENER
 

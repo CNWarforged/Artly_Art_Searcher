@@ -1,5 +1,9 @@
 <h1>Locations</h1>
 
+<p> This table holds locations associated with the artists. These locations
+    hold the artist’s birth location and main residence as far as the information is known. 
+    States, provinces and territories are all included in the “state” field.</p>
+
 {{! READ table }}
 <table>
     <thead>
@@ -19,14 +23,14 @@
         {{#each Locations}}
         <tr>
             <td>{{this.locationID}}</td>
-            <td>{{this.country}}</td>
-            <td>{{this.state}}</td>
-            <td>{{this.city}}</td>
+            <td>{{this.Country}}</td>
+            <td>{{this.State}}</td>
+            <td>{{this.City}}</td>
 
             {{! DELETE form }}
             <form id='delete_location_form'>
                 <input type='hidden' name='delete_locationt_id' value='{{this.locationID}}' />
-                <input type='hidden' name='delete_location_name' value='{{this.country}}' />
+                <input type='hidden' name='delete_location_name' value='{{this.Country}}' />
                 <td>
                     <button type='submit'>
                         Delete
@@ -63,7 +67,7 @@
         <option value='{{this.locationID}}' required>
             {{this.locationID}}
             -
-            {{this.country}}
+            {{this.Country}}
         </option>
         {{/each}}
     </select>

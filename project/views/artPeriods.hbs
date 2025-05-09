@@ -1,5 +1,9 @@
 <h1>Art Periods</h1>
 
+<p>This table holds different art periods so the artworks are also searchable by the general period of time they were created in. 
+    The periods are represented by codes  for consistency, representing a century and then clarifying which part of the century: 
+    Early, Mid, or Late.</p>
+
 {{! READ table }}
 <table>
     <thead>
@@ -18,13 +22,13 @@
         {{! For each row, print the id, century, and centuryPart }}
         {{#each ArtPeriods}}
         <tr>
-            <td>{{this.periodID}}</td>
-            <td>{{this.century}}</td>
-            <td>{{this.centuryPart}}</td>
+            <td>{{this.PeriodID}}</td>
+            <td>{{this.Century}}</td>
+            <td>{{this.CenturyPart}}</td>
 
             {{! DELETE form }}
-            <form id='delete_artPeriod_form'>
-                <input type='hidden' name='delete_artPeriod_id' value='{{this.periodID}}' />
+            <form id='delete_artperiod_form'>
+                <input type='hidden' name='delete_artperiod_id' value='{{this.PeriodID}}' />
                 <td>
                     <button type='submit'>
                         Delete
@@ -38,16 +42,16 @@
 
 {{! CREATE form }}
 <h2>Add a New Art Period</h2>
-<form class='cuForm' id='create_artPeriod_form'>
-    <label for='create_artPeriod_century'>Century: </label>
-    <input type='number' name='create_artPeriod_century' id='create_artPeriod_century' required />
+<form class='cuForm' id='create_artperiod_form'>
+    <label for='create_artperiod_century'>Century: </label>
+    <input type='number' name='create_artperiod_century' id='create_artperiod_century' required />
 
-    <label for='create_artPeriod_centuryPart'>Century Part:</label>
-    <select name='create_artPeriod_centuryPart' id='create_artPeriod_centuryPart' required>
+    <label for='create_artperiod_centurypart'>Century Part:</label>
+    <select name='create_artPeriod_centurypart' id='create_artPeriod_centurypart' required>
         <option value='NULL' selected>Select a Period</option>
         <option value='NULL'>&lt; None &gt;</option>
-        {{#each CenturyParts}}
-        <option value='{{this.periodID}}'>{{this.centuryPart}}</option>
+        {{#each ArtPeriods}}
+        <option value='{{this.PeriodID}}'>{{this.CenturyPart}}</option>
         {{/each}}
     </select>
     <input type='submit' />
@@ -55,28 +59,28 @@
 
 {{! UPDATE form }}
 <h2>Update an Art Period</h2>
-<form class='cuForm' id='update_artPeriod_form'>
-    <label for='update_artPeriod_id'>Art Period to Update: </label>
-    <select name='update_artPeriod_id' id='update_artPeriod_id' required>
+<form class='cuForm' id='update_artperiod_form'>
+    <label for='update_artperiod_id'>Art Period to Update: </label>
+    <select name='update_artperiod_id' id='update_artperiod_id' required>
         <option value='' disabled selected>Select an Art Period</option>
         {{#each ArtPeriods}}
-        <option value='{{this.periodID}}' required>
-            {{this.periodID}}
+        <option value='{{this.PeriodID}}' required>
+            {{this.PeriodID}}
             -
-            {{this.century}}
-            {{this.centuryPart}}
+            {{this.Century}}
+            {{this.CenturyPart}}
         </option>
         {{/each}}
     </select>
-    <label for='update_artPeriod_century'>Century: </label>
-    <input type='number' name='update_artPeriod_century' id='update_artPeriod_century' required />
+    <label for='update_artperiod_century'>Century: </label>
+    <input type='number' name='update_artperiod_century' id='update_artperiod_century' required />
 
-    <label for='update_artPeriod_centuryPart'>Century Part:</label>
-    <select name='update_artPeriod_centuryPart' id='update_artPeriod_centuryPart' required>
+    <label for='update_artperiod_centurypart'>Century Part:</label>
+    <select name='update_artperiod_centurypart' id='update_artperiod_centurypart' required>
         <option value='NULL' disabled selected>Select a Period</option>
         <option value='NULL'>&lt; None &gt;</option>
-        {{#each CenturyParts}}
-        <option value='{{this.periodID}}'>{{this.centuryPart}}</option>
+        {{#each ArtPeriods}}
+        <option value='{{this.PeriodID}}'>{{this.CenturyPart}}</option>
         {{/each}}
     </select>
     <input type='submit' />

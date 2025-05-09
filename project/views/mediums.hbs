@@ -1,5 +1,7 @@
 <h1>Mediums</h1>
 
+<p>These are codes to represent different artistic mediums (like acrylic, oil, photography, mixed media, etc.).</p>
+
 {{! READ table }}
 <table>
     <thead>
@@ -19,12 +21,12 @@
         {{#each Mediums}}
         <tr>
             <td>{{this.mediumID}}</td>
-            <td>{{this.mediumDescription}}</td>
+            <td>{{this.Description}}</td>
 
             {{! DELETE form }}
             <form id='delete_medium_form'>
                 <input type='hidden' name='delete_medium_id' value='{{this.mediumID}}' />
-                <input type='hidden' name='delete_medium_name' value='{{this.mediumDescription}}' />
+                <input type='hidden' name='delete_medium_name' value='{{this.Description}}' />
                 <td>
                     <button type='submit'>
                         Delete
@@ -55,7 +57,7 @@
         <option value='{{this.mediumID}}' required>
             {{this.mediumID}}
             -
-            {{this.mediumDescription}}
+            {{this.Description}}
         </option>
         {{/each}}
     </select>

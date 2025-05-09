@@ -1,5 +1,7 @@
 <h1>Artworks</h1>
 
+<p>This table records the names and information of the artworks for the artists we have the search available for.</p>
+
 {{! READ table }}
 <table>
     <thead>
@@ -19,18 +21,17 @@
         {{#each Artworks}}
         <tr>
             <td>{{this.artworkID}}</td>
-            <td>{{this.digitalArt}}</td>
-            <td>{{this.dateCreated}}</td>
-            <td>{{this.artPeriodCode}}</td>
-            <td>{{this.artMediumCode}}</td>
-            <td>{{this.artName}}</td>
-            <td>{{this.mediumID}}</td>
-            <td>{{this.mediumDescription}}</td>
+            <td>{{this.DigitalArt}}</td>
+            <td>{{this.Date}}</td>
+            <td>{{this.PeriodCode}}</td>
+            <td>{{this.Medium}}</td>
+            <td>{{this.ArtworkName}}</td>
+            <td>{{this.ArtistName}}</td>
     
             {{! DELETE form }}
             <form id='delete_artwork_form'>
                 <input type='hidden' name='delete_artwork_id' value='{{this.artworkID}}' />
-                <input type='hidden' name='delete_artwork_name' value='{{this.artName}}' />
+                <input type='hidden' name='delete_artwork_name' value='{{this.ArtworkName}}' />
                 <td>
                     <button type='submit'>
                         Delete
@@ -45,19 +46,17 @@
 {{! CREATE form }}
 <h2>Add a New Artwork</h2>
 <form class='cuForm' id='create_artwork_form'>
-    <label for='create_artwork_digitalArt'>Digital Art? (0/1): </label>
-    <input type='number' name='create_artwork_digitalArt' id='create_artwork_digitalArt' min='0' max='1' />
+    <label for='create_artwork_digitalart'>Digital Art? (0/1): </label>
+    <input type='number' name='create_artwork_digitalart' id='create_artwork_digitalart' min='0' max='1' />
 
-    <label for='create_artwork_dateCreated'>Date of Creation: </label>
-    <input type='date' name='create_artwork_dateCreated' id='create_artwork_dateCreated' />
+    <label for='create_artwork_datecreated'>Date of Creation: </label>
+    <input type='date' name='create_artwork_datecreated' id='create_artwork_datecreated' />
 
-{{! I wasnt sure how to do artPeriodCode}}
     <label for='create_artwork_artPeriodCode'>Art Period Code:</label>
-    <input type='number' name='create_artwork_artPeriodCode' id='create_artwork_artPeriodCode' />
+    <input type='text' name='create_artwork_artperiodcode' id='create_artwork_artperiodcode' />
 
-    
-    <label for='create_artwork_artMediumCode'>Art Medium Code: </label>
-    <select name='create_artwork_artMediumCode' id='create_artwork_artMediumCode'>
+    <label for='create_artwork_artmediumcode'>Art Medium Code: </label>
+    <select name='create_artwork_artmediumcode' id='create_artwork_artmediumcode'>
         <option value='NULL' selected>Select a Medium</option>
         <option value='NULL'>&lt; None &gt;</option>
         {{#each Mediums}}
@@ -81,7 +80,7 @@
         <option value='{{this.artworkID}}' required>
             {{this.artworkID}}
             -
-            {{this.artName}}
+            {{this.ArtworkName}}
         </option>
         {{/each}}
     </select>
@@ -92,7 +91,7 @@
         <option value='NULL'>&lt; None &gt;</option>
         {{#each Mediums}}
         <option value='{{this.mediumID}}' required>
-            {{this.mediumDEscription}}
+            {{this.mediumDescription}}
         </option>
         {{/each}}
     </select>
