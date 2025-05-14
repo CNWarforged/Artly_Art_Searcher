@@ -1,9 +1,19 @@
+--Citation for AI use:
+--On: 5/13/2025
+--For: sp_load_artlydb
+--Source: https://chatgpt.com/
+--AI was used for our stored proc “sp_load_artlydb” as per instructions. We chose ChatGPT.
+--The prompt we used was: 
+--“Hi! For an assignment I was told to give you my DDL schema for MariaDB and ask you to make a stored proc for me to use to be able to load our database queries and our sample data. 
+--Here's the DDL data we made:
+--[DDL.SQL was provided from our project here]”
+--It was then edited for style and useability.
+
 -- This is our stored proc to load the db for our ArtlyArtSearcher project!
 -- The database serves as the backend for an archive of artists and their art.
 -- ArtistArtworks serves as the connection table between Artists and Artworks.
 -- Most of the other tables are category tables to handle the details 
 -- we need for the artists or artworks.
--- No AI art will be included in our database.
 -- 
 -- Project Name: Artly Art Searcher
 -- Admins/devs: Allessandra Bakker and Jennifer Phillips
