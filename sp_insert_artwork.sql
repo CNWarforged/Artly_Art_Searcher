@@ -4,7 +4,9 @@
 --Source: https://chatgpt.com/
 --ChatGPT AI was used to make a view sp_insert_artwork.
 --The prompt used was: 
---“Could you also create a stored procedure called sp_insert_artwork that will use MariaDB and will insert an artwork into the Artworks table and then return the newly created ID?”
+--“Could you also create a stored procedure called sp_insert_artwork that 
+--will use MariaDB and will insert an artwork into the Artworks table and then 
+--return the newly created ID?”
 --It returned a suggestion to use this to call the proc:
 --CALL sp_insert_artwork(
 --    1,
@@ -17,9 +19,10 @@
 
 --SELECT @new_artwork_id;
 
-DROP PROCEDURE  IF EXISTS sp_insert_artwork;
+DROP PROCEDURE IF EXISTS sp_insert_artwork;
 
 DELIMITER $$
+
 CREATE PROCEDURE sp_insert_artwork (
     IN p_digitalArt TINYINT,
     IN p_dateCreated DATE,

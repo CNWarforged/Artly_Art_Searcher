@@ -19,7 +19,9 @@
 -- Admins/devs: Allessandra Bakker and Jennifer Phillips
 
 DROP PROCEDURE IF EXISTS sp_load_artlydb;
+
 DELIMITER //
+
 CREATE PROCEDURE sp_load_artlydb()
 BEGIN
     -- Disable foreign key checks and auto-commit

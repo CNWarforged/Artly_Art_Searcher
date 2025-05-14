@@ -7,6 +7,8 @@
 --“Using the schema I just sent for Maria DB, could you create a view called v_artistartcount for me that shows the artists (their name and residence location) and a count showing each of their artwork numbers in our database?”
 --The results required a few round with the AI since we accidentally asked for residence location and not birth location, and also because the AI tried to concatenate all location data into one string.
 
+DROP VIEW IF EXISTS v_artistartcount;
+
 CREATE OR REPLACE VIEW v_artistartcount AS
 SELECT 
     a.fullName AS artist_name,
