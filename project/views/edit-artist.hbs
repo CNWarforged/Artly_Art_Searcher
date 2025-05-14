@@ -1,0 +1,58 @@
+<h1>Update Artist: {{Artist.fullName}}</h1>
+
+<h2>Artist Information</h2>
+<form method="POST" action="/update-artist/{{Artist.artistID}}">
+    <input type="hidden" name="original_artistID" value="{{Artist.artistID}}" />
+    <label>Name: <input type="text" name="fullName" value="{{Artist.fullName}}" /></label><br />
+    <label>Gender Code: <input type="text" name="genderCode" value="{{Artist.genderCode}}" /></label><br />
+    <label>Queer: <input type="number" min="0" max="1" name="queer" value="{{Artist.queer}}" /></label><br />
+    <label>Birthplace:
+        <select name="birthLocID">
+            {{#each Locations}}
+                <option value="{{this.locationID}}" {{#if (eq this.locationID ../Artist.birthLocID)}}selected{{/if}}>
+                    {{this.city}}, {{this.state}}
+                </option>
+            {{/each}}
+        </select>
+    </label><br />
+    <label>Residence:
+        <select name="residenceLocID">
+            {{#each Locations}}
+                <option value="{{this.locationID}}" {{#if (eq this.locationID ../Artist.residenceLocID)}}selected{{/if}}>
+                    {{this.city}}, {{this.state}}
+                </option>
+            {{/each}}
+        </select>
+    </label><br />
+    <button type="submit">Update Artist</button>
+</form>
+
+<h2>Artworks</h2>
+{{#each Artworks}}
+    <form method="POST" action="/update-artwork/{{this.artworkID}}">
+        <input type="hidden" name="original_artworkID" value="{{this.artworkID}}" />
+        <label>Name: <input type="text" name="artName" value="{{this.artName}}" /></label>
+        <label>Date Created: <input type="date" name="dateCreated" value="{{this.dateCreated}}" /></label>
+        <label>Digital? <input type="number" name="digitalArt" min="0" max="1" value="{{this.digitalArt}}" /></label>
+        <label>Period:
+            <select name="artPeriodCode">
+                {{#each ../ArtPeriods}}
+                    <option value="{{this.periodID}}" {{#if (eq this.periodID ../this.artPeriodCode)}}selected{{/if}}>
+                        {{this.century}} {{this.centuryPart}}
+                    </option>
+                {{/each}}
+            </select>
+        </label>
+        <label>Medium:
+            <select name="artMediumCode">
+                {{#each ../Mediums}}
+                    <option value="{{this.mediumID}}" {{#if (eq this.mediumID ../this.artMediumCode)}}selected{{/if}}>
+                        {{this.mediumDescription}}
+                    </option>
+                {{/each}}
+            </select>
+        </label>
+        <button type="submit">Update Artwork</button>
+    </form>
+    <hr />
+{{/each}}

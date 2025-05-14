@@ -8,7 +8,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
-const PORT = 41121;
+const PORT = 41124;
 
 // Database
 const db = require('./database/db-connector');
@@ -17,6 +17,16 @@ const db = require('./database/db-connector');
 const { engine } = require('express-handlebars'); // Import express-handlebars engine
 app.engine('.hbs', engine({ extname: '.hbs' })); // Create instance of handlebars
 app.set('view engine', '.hbs'); // Use handlebars engine for *.hbs files.
+
+app.engine(
+    '.hbs',
+    engine({
+      extname: '.hbs',
+      helpers: {
+        eq: (a, b) => a === b
+      }
+    })
+  );
 
 // ########################################
 // ########## ROUTE HANDLERS
@@ -161,6 +171,80 @@ app.get('/mediums', async function (req, res) {
         res.status(500).send(
             'An error occurred while executing the database queries.'
         );
+    }
+});
+
+app.get('/artist-summary', async function (req, res) {
+    console.log('✅ Route /artist-summary was hit');
+    try {
+        const query = 'SELECT * FROM v_artistartcount;';
+        const [summary] = await db.query(query);
+        res.render('artist-summary', { Summary: summary });
+    } catch (err) {
+        console.error('Error loading artist summary:', err);
+        res.status(500).send('Error loading artist summary.');
+    }
+});
+
+
+app.get('/edit-artist/:artistID', async function (req, res) {
+    const artistID = req.params.artistID;
+
+    try {
+        const [[artist]] = await db.query('SELECT * FROM Artists WHERE artistID = ?', [artistID]);
+
+        const [artworks] = await db.query(
+            `SELECT a.* FROM Artworks a
+             JOIN ArtistArtworks aa ON a.artworkID = aa.artworkID
+             WHERE aa.artistID = ?`, [artistID]
+        );
+
+        const [locations] = await db.query('SELECT * FROM Locations;');
+        const [periods] = await db.query('SELECT * FROM ArtPeriods;');
+        const [mediums] = await db.query('SELECT * FROM Mediums;');
+
+        res.render('edit-artist', {
+            Artist: artist,
+            Artworks: artworks,
+            Locations: locations,
+            ArtPeriods: periods,
+            Mediums: mediums
+        });
+    } catch (err) {
+        console.error('Error loading edit artist page:', err);
+        res.status(500).send('Failed to load artist data.');
+    }
+});
+
+app.post('/update-artist/:artistID', async function (req, res) {
+    const { fullName, genderCode, queer, birthLocID, residenceLocID } = req.body;
+    const artistID = req.params.artistID;
+
+    try {
+        await db.query(
+            `CALL UpdateArtistFull(?, ?, ?, ?, ?, ?, ?)`,
+            [artistID, artistID, fullName, genderCode, queer, birthLocID, residenceLocID]
+        );
+        res.redirect('/artist-summary');
+    } catch (err) {
+        console.error('Error updating artist:', err);
+        res.status(500).send('Failed to update artist.');
+    }
+});
+
+app.post('/update-artwork/:artworkID', async function (req, res) {
+    const { artName, digitalArt, dateCreated, artPeriodCode, artMediumCode } = req.body;
+    const artworkID = req.params.artworkID;
+
+    try {
+        await db.query(
+            `CALL UpdateArtworkFull(?, ?, ?, ?, ?, ?, ?)`,
+            [artworkID, artworkID, artName, digitalArt, dateCreated, artPeriodCode, artMediumCode]
+        );
+        res.redirect(`/edit-artist/${req.body.artistID}`);
+    } catch (err) {
+        console.error('Error updating artwork:', err);
+        res.status(500).send('Failed to update artwork.');
     }
 });
 

@@ -10,15 +10,9 @@
 DROP VIEW IF EXISTS v_artistartcount;
 
 CREATE OR REPLACE VIEW v_artistartcount AS
-SELECT 
-    a.fullName AS artist_name,
-    l.city AS birth_city,
-    l.state AS birth_state,
-    l.country AS birth_country,
-    COUNT(aa.artworkID) AS artwork_count
+SELECT a.artistID, a.fullName, COUNT(aa.artworkID) AS artworkCount
 FROM Artists a
-LEFT JOIN Locations l ON a.birthLocID = l.locationID
 LEFT JOIN ArtistArtworks aa ON a.artistID = aa.artistID
-GROUP BY a.artistID, a.fullName, l.city, l.state, l.country;
+GROUP BY a.artistID;
 
 SELECT * FROM v_artistartcount;

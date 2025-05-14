@@ -1,0 +1,26 @@
+<h1>Artist Summary</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Artist ID</th>
+            <th>Full Name</th>
+            <th>Number of Artworks</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each Summary}}
+        <tr>
+            <td>{{this.artistID}}</td>
+            <td>{{this.fullName}}</td>
+            <td>{{this.artworkCount}}</td>
+            <td>
+                <form action="/edit-artist/{{this.artistID}}" method="get">
+                    <button type="submit">Update</button>
+                </form>
+            </td>
+        </tr>
+        {{/each}}
+    </tbody>
+</table>

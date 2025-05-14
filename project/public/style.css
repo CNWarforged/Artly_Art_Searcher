@@ -23,7 +23,7 @@
 
   body {      
     background-color: var(--yellow-gray);
-    background-image: url(src/assets/van-gogh-sunflowers.png);
+    background-image: url(/images/van-gogh-sunflowers.png);
     background-repeat: no-repeat, transparent;
     background-size: cover;
     background-attachment: fixed;
@@ -53,3 +53,9 @@ input, select { margin-bottom: 4px;margin-right: 12px;}
 nav {background-color: var(--light-turqoise);padding: 16px;}
 a {margin-left: 16px;}
 .homepageDescription {margin-left: 32px;}
+
+table {
+  border-collapse: collapse;
+  margin: 32px auto; /* Center the table horizontally */
+  background-color: var(--sunflower-yellow);
+}
