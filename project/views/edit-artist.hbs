@@ -1,36 +1,59 @@
 <h1>Edit Artist: {{Artist.Artist_Name}}</h1>
 
-<form method="POST" action="/update-artist/{{Artist.Artist_Name}}">
+<p>This page lets you update an artist or their artworks. It will also update the intersection table 
+  that connects those tables.</p>
+
+<form method="POST" action="/update-artist/{{Artist.ID}}">
   <label>Artist Name:</label>
-  <input type="text" name="fullName" value="{{Artist.Artist_Name}}" /><br>
+  <input type="text" name="fullName" value="{{Artist.Artist_Name}}" />
 
-  <label>Gender:</label>
-  <input type="text" name="genderCode" value="{{Artist.Gender}}" /><br>
+  <label>Queer?:</label>
+  <input type="checkbox" name="queer" value="1" {{#if Artist.Queer}}checked{{/if}} />
 
-  <label>Queer:</label>
-  <input type="checkbox" name="queer" value="1" {{#if Artist.Queer}}checked{{/if}} /><br>
-
-  <label for='update_artist_birth_location'>Artist Birth Location: </label>
-    <select name='update_artist_birth_location' id='update_artist_birth_location'>
-        <option value='NULL' disabled selected>Select a Location</option>
-        <option value='NULL'>&lt; None &gt;</option>
-        {{#each Locations}}
-        <option value='{{this.Country}}' required>
-            {{this.State}}
+  <label for='update_artist_gender'>Artist Gender: </label>
+    <select name='update_artist_gender' id='update_artist_gender'>
+        <option value='NULL' disabled selected>'{{Artist.Gender}}'</option>
+        {{#each GenderCodes}}
+        <option value='{{this.genderID}}' required>
+            {{this.description}}
         </option>
         {{/each}}
-    </select>
+    </select><br>
 
-    <label for='update_artist_res_location'>Artist Main Residence: </label>
-    <select name='update_artist_res_location' id='update_artist_res_location'>
-        <option value='NULL' disabled selected>Select a Location</option>
-        <option value='NULL'>&lt; None &gt;</option>
-        {{#each Locations}}
-        <option value='{{this.Country}}' required>
-            {{this.State}}
-        </option>
-        {{/each}}
-    </select>
+  <label for='update_artist_birth_state'>Artist Birth State/Providence: </label>
+  <select name='birthLocID' id='update_artist_birth_state'>
+    <option value='NULL' disabled>Select a Location</option>
+    <option value='NULL'>&lt; None &gt;</option>
+    {{#each Locations}}
+      <option value='{{this.Location}}' {{#if (eq this.Location ../Artist.Birthplace)}}selected{{/if}}>
+        {{this.State}}
+      </option>
+    {{/each}}
+  </select>
+
+  <label for='update_artist_birth_country'>Artist Country: </label>
+  <select name='birthLocID' id='update_artist_birth_country'>
+    <option value='NULL' disabled>Select a Location</option>
+    <option value='NULL'>&lt; None &gt;</option>
+    {{#each Locations}}
+      <option value='{{this.Location}}' {{#if (eq this.Location ../Artist.Birthplace)}}selected{{/if}}>
+        {{this.Country}}
+      </option>
+    {{/each}}
+  </select>
+
+  <label for='update_artist_res_location'>Artist Main Residence: </label>
+  <select name='residenceLocID' id='update_artist_res_location'>
+    <option value='NULL' disabled>Select a Location</option>
+    <option value='NULL'>&lt; None &gt;</option>
+    {{#each Locations}}
+      <option value='{{this.Location}}' {{#if (eq this.Location ../Artist.Residence)}}selected{{/if}}>
+        {{this.State}}
+        -
+        {{this.Country}}
+      </option>
+    {{/each}}
+  </select>
 
   <button type="submit">Update Artist</button>
 </form>
@@ -39,23 +62,50 @@
 <table>
   <thead>
     <tr>
-       {{#each Summary.[0]}}
-            <th>
-                {{@key}}
-            </th>
-        {{/each}}
+      <th>Artwork ID</th>
+      <th>Name</th>
+      <th>Digital?</th>
+      <th>Date Created</th>
+      <th>Period</th>
+      <th>Medium</th>
+      <th>Action</th>
     </tr>
   </thead>
   <tbody>
     {{#each Artworks}}
-      <tr>
-        <td>{{this.Artwork_ID}}</td>
-        <td>{{this.Artwork_Name}}</td>
-        <td>{{this.Digital_Art}}</td>
-        <td>{{this.Date}}</td>
-        <td>{{this.Period}}</td>
-        <td>{{this.Medium}}</td>
-      </tr>
+    <tr>
+      <form method="POST" action="/update-artwork/{{this.Artwork_ID}}">
+        <td>{{this.Artwork_ID}}<input type="hidden" name="artworkID" value="{{this.Artwork_ID}}" /></td>
+        <td><input type="text" name="artName" value="{{this.Artwork_Name}}" /></td>
+        <td>
+          <input type="checkbox" name="digitalArt" value="1" {{#if this.Digital_Art}}checked{{/if}} />
+        </td>
+        <td><input type="date" name="dateCreated" value="{{this.Date}}" /></td>
+        <td>
+          <select name="artPeriodCode">
+            {{#each ../ArtPeriods}}
+              {{#if (eq this.Period ../this.Period)}}
+                <option value="{{this.Period}}" selected>{{this.Century}} - {{this.Century_Part}}</option>
+              {{else}}
+                <option value="{{this.Period}}">{{this.Century}} - {{this.Century_Part}}</option>
+              {{/if}}
+            {{/each}}
+          </select>
+        </td>
+        <td>
+          <select name="artMediumCode">
+            {{#each ../Mediums}}
+              {{#if (eq this.Medium ../this.Medium)}}
+                <option value="{{this.Medium}}" selected>{{this.Description}}</option>
+              {{else}}
+                <option value="{{this.Medium}}">{{this.Description}}</option>
+              {{/if}}
+            {{/each}}
+          </select>
+        </td>
+        <td><button type="submit">Update</button></td>
+      </form>
+    </tr>
     {{/each}}
   </tbody>
 </table>

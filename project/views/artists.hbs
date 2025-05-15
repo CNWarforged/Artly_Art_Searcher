@@ -1,6 +1,7 @@
 <h1>Artists</h1>
 
-<p>This holds the names and information of the artists we’re tracking.</p>
+<p>This holds the names and information of the artists we’re tracking. 
+    Updates to this will also update our intersection table, ArtistArtworks.</p>
 
 {{! READ table }}
 <table>
@@ -50,18 +51,30 @@
     <label for='create_artist_fullname'>Full Name: </label>
     <input type='text' name='create_artist_fullname' id='create_artist_fullname' required />
 
-    <label for='create_artist_gender'>Gender Code: </label>
-    <input type='text' name='create_artist_gender' id='create_artist_gender' />
+    <label for='create_artist_gender'>Artist Gender: </label>
+    <select name='create_artist_gender' id='create_artist_gender'>
+        <option value='NULL' disabled selected>Select a Gender</option>
+        {{#each GenderCodes}}
+        <option value='{{this.genderID}}' required>
+            {{this.description}}
+        </option>
+        {{/each}}
+    </select>
 
-    <label for='create_artist_queer'>Queer? (0/1):</label>
-    <input type='number' name='create_artist_queer' id='create_artist_queer' min='0' max='1' />
+    <label for='create_artist_queer'>Queer?: </label>
+    <input type='checkbox' name='create_artist_queer' value="1" 
+        {{#if this.Digital_Art}}checked{{/if}} id='create_artist_queer' />
 
     <label for='create_artist_birth_loc'>Birth Location: </label>
     <select name='create_artist_birth_loc' id='create_artist_birth_loc'>
         <option value='NULL' selected>Select a Location</option>
         <option value='NULL'>&lt; None &gt;</option>
         {{#each Locations}}
-        <option value='{{this.country}}'>{{this.state}}</option>
+        <option value='{{this.country}}'>
+             {{this.country}}
+            -
+            {{this.state}}
+            </option>
         {{/each}}
     </select>
 
@@ -70,7 +83,10 @@
         <option value='NULL' selected>Select a Location</option>
         <option value='NULL'>&lt; None &gt;</option>
         {{#each Locations}}
-        <option value='{{this.country}}'>{{this.state}}</option>
+        <option value='{{this.country}}'>
+            {{this.country}}
+            -
+            {{this.state}}
         {{/each}}
     </select>
 
@@ -92,13 +108,18 @@
         {{/each}}
     </select>
 
+    <label for='update_artist_id'>Change Artist ID: </label>
+    <input type='number' name='update_artist_id' id='update_artist_id' />
+
     <label for='update_artist_birth_location'>Artist Birth Location: </label>
     <select name='update_artist_birth_location' id='update_artist_birth_location'>
         <option value='NULL' disabled selected>Select a Location</option>
         <option value='NULL'>&lt; None &gt;</option>
         {{#each Locations}}
-        <option value='{{this.Country}}' required>
-            {{this.State}}
+        <option value='{{this.country}}' required>
+            {{this.country}}
+            -
+            {{this.state}}
         </option>
         {{/each}}
     </select>
@@ -108,8 +129,10 @@
         <option value='NULL' disabled selected>Select a Location</option>
         <option value='NULL'>&lt; None &gt;</option>
         {{#each Locations}}
-        <option value='{{this.Country}}' required>
-            {{this.State}}
+        <option value='{{this.country}}' required>
+            {{this.country}}
+            -
+            {{this.state}}
         </option>
         {{/each}}
     </select>
@@ -117,8 +140,19 @@
     <label for='update_artist_name'>Artist Full Name: </label>
     <input type='text' name='update_artist_name' id='update_artist_name' />
 
-    <label for='update_artist_gender'>Gender Code: </label>
-    <input type='text' name='update_artist_gender' id='update_artist_gender' />
+    <label for='update_artist_gender'>Update Gender: </label>
+    <select name='update_artist_gender' id='update_artist_gender'>
+        <option value='NULL' disabled selected>Select a Gender Code</option>
+        {{#each GenderCodes}}
+        <option value='{{this.genderID}}' required>
+            {{this.description}}
+        </option>
+        {{/each}}
+    </select>
+
+    <label for='update_artist_queer'>Queer?: </label>
+    <input type='checkbox' name='update_artist_queer' value="1" 
+        {{#if this.Digital_Art}}checked{{/if}} id='update_artist_queer' />
 
     <input type='submit' />
 </form>

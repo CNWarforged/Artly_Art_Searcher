@@ -1,6 +1,7 @@
 <h1>Artworks</h1>
 
-<p>This table records the names and information of the artworks for the artists we have the search available for.</p>
+<p>This table records the names and information of the artworks for the artists we have the search available for. 
+    Updates to this will also update our intersection table, ArtistArtworks.</p>
 
 {{! READ table }}
 <table>
@@ -46,26 +47,43 @@
 {{! CREATE form }}
 <h2>Add a New Artwork</h2>
 <form class='cuForm' id='create_artwork_form'>
-    <label for='create_artwork_digitalart'>Digital Art? (0/1): </label>
-    <input type='number' name='create_artwork_digitalart' id='create_artwork_digitalart' min='0' max='1' />
-
-    <label for='create_artwork_datecreated'>Date of Creation: </label>
-    <input type='date' name='create_artwork_datecreated' id='create_artwork_datecreated' />
-
-    <label for='create_artwork_artPeriodCode'>Art Period Code:</label>
-    <input type='text' name='create_artwork_artperiodcode' id='create_artwork_artperiodcode' />
+    <label for='create_artwork_name'>Artwork Name: </label>
+    <input type='text' name='create_artwork_name' id='create_artwork_name' />
+    
+    <label for='create_artwork_artist'>Artist: </label>
+    <select name='create_artwork_artist' id='create_artwork_artist'>
+        <option value='NULL' selected>Select the Artist</option>
+        {{#each Artists}}
+        <option value='{{this.artistID}}'>{{this.fullName}}</option>
+        {{/each}}
+    </select>
 
     <label for='create_artwork_artmediumcode'>Art Medium Code: </label>
     <select name='create_artwork_artmediumcode' id='create_artwork_artmediumcode'>
         <option value='NULL' selected>Select a Medium</option>
-        <option value='NULL'>&lt; None &gt;</option>
         {{#each Mediums}}
         <option value='{{this.mediumID}}'>{{this.mediumDescription}}</option>
         {{/each}}
     </select>
 
-    <label for='create_artwork_name'>Artwork Name: </label>
-    <input type='text' name='create_artwork_name' id='create_artwork_name' />
+    <label for='create_artwork_artPeriodCode'>Art Period: </label>
+    <select name='create_artwork_artPeriodCode' id='create_artwork_artPeriodCode'>
+        <option value='NULL' selected>Select an Art Period</option>
+        {{#each ArtPeriods}}
+        <option value='{{this.periodID}}'>
+            {{this.century}}
+            -
+            {{this.centuryPart}}
+            </option>
+        {{/each}}
+    </select><br>
+
+    <label for='create_artwork_datecreated'>Date of Creation: </label>
+    <input type='date' name='create_artwork_datecreated' id='create_artwork_datecreated' />
+
+    <label for='create_artwork_digitalArt'>Digital Art: </label>
+    <input type='checkbox' name='create_artwork_digitalArt' value="1" 
+        {{#if this.Digital_Art}}checked{{/if}} id='create_artwork_digitalArt' />
 
     <input type='submit' />
 </form>
@@ -85,6 +103,14 @@
         {{/each}}
     </select>
 
+     <label for='update_artwork_artist'>Update the Artwork's Artist: </label>
+    <select name='update_artwork_artist' id='update_artwork_artist'>
+        <option value='NULL' selected>Select the Artist</option>
+        {{#each Artists}}
+        <option value='{{this.artistID}}'>{{this.fullName}}</option>
+        {{/each}}
+    </select>
+
     <label for='update_artwork_artMediumCode'>Art Medium Code: </label>
     <select name='update_artwork_artMediumCode' id='update_artwork_artMediumCode'>
         <option value='NULL' selected>Select a Medium</option>
@@ -93,6 +119,18 @@
         <option value='{{this.mediumID}}' required>
             {{this.mediumDescription}}
         </option>
+        {{/each}}
+    </select><br>
+
+    <label for='update_artwork_artPeriodCode'>Art Period: </label>
+    <select name='update_artwork_artPeriodCode' id='update_artwork_artPeriodCode'>
+        <option value='NULL' selected>Select an Art Period</option>
+         {{#each ArtPeriods}}
+        <option value='{{this.periodID}}'>
+            {{this.century}}
+            -
+            {{this.centuryPart}}
+            </option>
         {{/each}}
     </select>
 
@@ -103,7 +141,8 @@
     <input type='date' name='update_artwork_dateCreated' id='update_artwork_dateCreated' />
 
     <label for='update_artwork_digitalArt'>Digital Art: </label>
-    <input type='number' name='create_artwork_digitalArt' id='create_artwork_digitalArt' />
+    <input type='checkbox' name='update_artwork_digitalArt' value="1" 
+        {{#if this.Digital_Art}}checked{{/if}} id='update_artwork_digitalArt' />
 
     <input type='submit' />
 </form>

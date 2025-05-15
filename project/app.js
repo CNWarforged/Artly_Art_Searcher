@@ -48,14 +48,16 @@ app.get('/artists', async function (req, res) {
             Artists.residenceLocID AS 'Residence', \
             Artists.birthLocID AS 'Birthplace', \
             Locations.country AS 'Country', Locations.state AS 'State' FROM Artists \
-            LEFT JOIN Locations ON Artists.birthLocID = Locations.locationID;`;
+            LEFT JOIN Locations ON Artists.birthLocID = Locations.locationID 
+            ORDER BY Artists.fullName ASC;`;
         const query2 = 'SELECT * FROM Locations;';
+        const query3 = "SELECT * FROM GenderCodes;";
         const [Artists] = await db.query(query1);
         const [Locations] = await db.query(query2);
-
+        const [GenderCodes] = await db.query(query3);
         // Render the artists.hbs file, and also send the renderer
         //  an object that contains our artsts and locations information
-        res.render('artists', { Artists: Artists, Locations: Locations });
+        res.render('artists', { Artists: Artists, Locations: Locations, GenderCodes: GenderCodes });
     } catch (error) {
         console.error('Error executing queries:', error);
         // Send a generic error message to the browser
@@ -94,16 +96,18 @@ app.get('/artworks', async function (req, res) {
             Artists.fullName AS 'Artist_Name' \
             FROM Artworks \
             JOIN Artists ON Artists.artistID = (SELECT artistID FROM ArtistArtworks \
-            WHERE ArtistArtworks.artworkID = Artworks.artworkID);`;
+            WHERE ArtistArtworks.artworkID = Artworks.artworkID)
+            ORDER BY Artworks.artName ASC;`;
         const query2 = 'SELECT * FROM ArtPeriods;';
         const query3 = 'SELECT * FROM Mediums;';
+        const query4 = 'SELECT * FROM Artists;';
         const [Artworks] = await db.query(query1);
         const [ArtPeriods] = await db.query(query2);
         const [Mediums] = await db.query(query3);
-
+        const [Artists] = await db.query(query4);
         // Render the artworks.hbs file, and also send the renderer
         // an object that contains our artworks and periods and medium information
-        res.render('artworks', { Artworks: Artworks, ArtPeriods: ArtPeriods, Mediums: Mediums });
+        res.render('artworks', { Artworks: Artworks, ArtPeriods: ArtPeriods, Mediums: Mediums, Artists: Artists });
     } catch (error) {
         console.error('Error executing queries:', error);
         // Send a generic error message to the browser
@@ -175,7 +179,8 @@ app.get('/artist-summary', async function (req, res) {
     try {
         const query = `SELECT artistID AS 'ID', fullName AS 'Artist_Name', \
             artworkCount AS 'Artwork_Count' \
-            FROM v_artistartcount;`;
+            FROM v_artistartcount 
+            ORDER BY fullName ASC;`;
         const [Summary] = await db.query(query);
         res.render('artist-summary', { Summary: Summary });
     } catch (err) {
@@ -185,7 +190,7 @@ app.get('/artist-summary', async function (req, res) {
 });
 
 app.get('/edit-artist/:ID', async function (req, res) {
-    const ID = req.params.artistID;
+    const ID = req.params.ID;
 
     try {
         const [[Artist]] = await db.query(`
@@ -213,12 +218,16 @@ app.get('/edit-artist/:ID', async function (req, res) {
             SELECT mediumID AS 'Medium', mediumDescription AS 'Description' \
             FROM Mediums;
         `);
+        const [GenderCodes] = await db.query(`
+            SELECT * FROM GenderCodes;
+        `);
         res.render('edit-artist', {
             Artist: Artist,
             Artworks: Artworks,
             Locations: Locations,
             ArtPeriods: Periods,
-            Mediums: Mediums
+            Mediums: Mediums,
+            GenderCodes: GenderCodes
         });
     } catch (err) {
         console.error('Error loading edit artist page:', err);
@@ -228,7 +237,7 @@ app.get('/edit-artist/:ID', async function (req, res) {
 
 app.post('/update-artist/:ID', async function (req, res) {
     const { fullName, genderCode, queer, birthLocID, residenceLocID } = req.body;
-    const artistID = req.params.ID;
+    const ID = req.params.ID;
 
     try {
         await db.query(
@@ -243,15 +252,14 @@ app.post('/update-artist/:ID', async function (req, res) {
 });
 
 app.post('/update-artwork/:Artwork_ID', async function (req, res) {
-    const { artName, digitalArt, dateCreated, artPeriodCode, artMediumCode } = req.body;
-    const Artwork_ID = req.params.Artwork_ID;
+    const { artworkID, artName, digitalArt, dateCreated, artPeriodCode, artMediumCode } = req.body;
 
     try {
         await db.query(
             `CALL UpdateArtworkFull(?, ?, ?, ?, ?, ?, ?)`,
-            [artworkID, artworkID, artName, digitalArt, dateCreated, artPeriodCode, artMediumCode]
+            [artworkID, artworkID, artName, digitalArt ? 1 : 0, dateCreated, artPeriodCode, artMediumCode]
         );
-        res.redirect(`/edit-artist/${req.body.ID}`);
+        res.redirect('back'); // This sends the user back to the edit-artist page
     } catch (err) {
         console.error('Error updating artwork:', err);
         res.status(500).send('Failed to update artwork.');
