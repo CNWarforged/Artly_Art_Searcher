@@ -20,19 +20,19 @@
         {{! For each row, print the id, name, gender, sexuality, birth and res id }}
         {{#each Artists}}
         <tr>
-            <td>{{this.artistID}}</td>
+            <td>{{this.ID}}</td>
             <td>{{this.Name}}</td>
             <td>{{this.Gender}}</td>
             <td>{{this.Queer}}</td>
-            <td>{{this.ResidenceID}}</td>
-            <td>{{this.BirthplaceID}}</td>
+            <td>{{this.Residence}}</td>
+            <td>{{this.Birthplace}}</td>
             <td>{{this.Country}}</td>
             <td>{{this.State}}</td>
 
             {{! DELETE form }}
             <form id='delete_artist_form'>
-                <input type='hidden' name='delete_artist_id' value='{{this.artistID}}' />
-                <input type='hidden' name='delete_artist_name' value='{{this.fullName}}' />
+                <input type='hidden' name='delete_artist_id' value='{{this.ID}}' />
+                <input type='hidden' name='delete_artist_name' value='{{this.Name}}' />
                 <td>
                     <button type='submit'>
                         Delete
@@ -84,8 +84,8 @@
     <select name='update_artist_id' id='update_artist_id' required>
         <option value='' disabled selected>Select an Artist</option>
         {{#each Artists}}
-        <option value='{{this.artistID}}' required>
-            {{this.artistID}}
+        <option value='{{this.ID}}' required>
+            {{this.ID}}
             -
             {{this.Name}}
         </option>
@@ -97,8 +97,8 @@
         <option value='NULL' disabled selected>Select a Location</option>
         <option value='NULL'>&lt; None &gt;</option>
         {{#each Locations}}
-        <option value='{{this.country}}' required>
-            {{this.state}}
+        <option value='{{this.Country}}' required>
+            {{this.State}}
         </option>
         {{/each}}
     </select>
@@ -108,8 +108,8 @@
         <option value='NULL' disabled selected>Select a Location</option>
         <option value='NULL'>&lt; None &gt;</option>
         {{#each Locations}}
-        <option value='{{this.country}}' required>
-            {{this.state}}
+        <option value='{{this.Country}}' required>
+            {{this.State}}
         </option>
         {{/each}}
     </select>

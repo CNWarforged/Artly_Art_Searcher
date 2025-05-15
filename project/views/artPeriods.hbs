@@ -14,7 +14,6 @@
                 {{@key}}
             </th>
             {{/each}}
-            <th></th>
         </tr>
     </thead>
 
@@ -22,66 +21,10 @@
         {{! For each row, print the id, century, and centuryPart }}
         {{#each ArtPeriods}}
         <tr>
-            <td>{{this.PeriodID}}</td>
+            <td>{{this.Period}}</td>
             <td>{{this.Century}}</td>
-            <td>{{this.CenturyPart}}</td>
-
-            {{! DELETE form }}
-            <form id='delete_artperiod_form'>
-                <input type='hidden' name='delete_artperiod_id' value='{{this.PeriodID}}' />
-                <td>
-                    <button type='submit'>
-                        Delete
-                    </button>
-                </td>
-            </form>
+            <td>{{this.Century_Part}}</td>
         </tr>
         {{/each}}
     </tbody>
 </table>
-
-{{! CREATE form }}
-<h2>Add a New Art Period</h2>
-<form class='cuForm' id='create_artperiod_form'>
-    <label for='create_artperiod_century'>Century: </label>
-    <input type='number' name='create_artperiod_century' id='create_artperiod_century' required />
-
-    <label for='create_artperiod_centurypart'>Century Part:</label>
-    <select name='create_artPeriod_centurypart' id='create_artPeriod_centurypart' required>
-        <option value='NULL' selected>Select a Period</option>
-        <option value='NULL'>&lt; None &gt;</option>
-        {{#each ArtPeriods}}
-        <option value='{{this.PeriodID}}'>{{this.CenturyPart}}</option>
-        {{/each}}
-    </select>
-    <input type='submit' />
-</form>
-
-{{! UPDATE form }}
-<h2>Update an Art Period</h2>
-<form class='cuForm' id='update_artperiod_form'>
-    <label for='update_artperiod_id'>Art Period to Update: </label>
-    <select name='update_artperiod_id' id='update_artperiod_id' required>
-        <option value='' disabled selected>Select an Art Period</option>
-        {{#each ArtPeriods}}
-        <option value='{{this.PeriodID}}' required>
-            {{this.PeriodID}}
-            -
-            {{this.Century}}
-            {{this.CenturyPart}}
-        </option>
-        {{/each}}
-    </select>
-    <label for='update_artperiod_century'>Century: </label>
-    <input type='number' name='update_artperiod_century' id='update_artperiod_century' required />
-
-    <label for='update_artperiod_centurypart'>Century Part:</label>
-    <select name='update_artperiod_centurypart' id='update_artperiod_centurypart' required>
-        <option value='NULL' disabled selected>Select a Period</option>
-        <option value='NULL'>&lt; None &gt;</option>
-        {{#each ArtPeriods}}
-        <option value='{{this.PeriodID}}'>{{this.CenturyPart}}</option>
-        {{/each}}
-    </select>
-    <input type='submit' />
-</form>

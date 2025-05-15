@@ -20,18 +20,18 @@
         {{! For each row, print the id, digital art, date it was created, art period code, art medium code, and art name }}
         {{#each Artworks}}
         <tr>
-            <td>{{this.artworkID}}</td>
-            <td>{{this.DigitalArt}}</td>
+            <td>{{this.Artwork_ID}}</td>
+            <td>{{this.Digital_Art}}</td>
             <td>{{this.Date}}</td>
-            <td>{{this.PeriodCode}}</td>
+            <td>{{this.Period}}</td>
             <td>{{this.Medium}}</td>
-            <td>{{this.ArtworkName}}</td>
-            <td>{{this.ArtistName}}</td>
-    
+            <td>{{this.Artwork_Name}}</td>
+            <td>{{this.Artist_Name}}</td>
+            
             {{! DELETE form }}
             <form id='delete_artwork_form'>
-                <input type='hidden' name='delete_artwork_id' value='{{this.artworkID}}' />
-                <input type='hidden' name='delete_artwork_name' value='{{this.ArtworkName}}' />
+                <input type='hidden' name='delete_artwork_id' value='{{this.Artwork_ID}}' />
+                <input type='hidden' name='delete_artwork_name' value='{{this.Artwork_Name}}' />
                 <td>
                     <button type='submit'>
                         Delete
@@ -77,10 +77,10 @@
     <select name='update_artwork_id' id='update_artwork_id' required>
         <option value='' disabled selected>Select an Artwork</option>
         {{#each Artworks}}
-        <option value='{{this.artworkID}}' required>
-            {{this.artworkID}}
+        <option value='{{this.Artwork_ID}}' required>
+            {{this.Artwork_ID}}
             -
-            {{this.ArtworkName}}
+            {{this.Artwork_Name}}
         </option>
         {{/each}}
     </select>

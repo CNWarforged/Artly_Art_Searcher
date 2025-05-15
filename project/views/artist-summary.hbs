@@ -1,26 +1,28 @@
 <h1>Artist Summary</h1>
 
+{{! READ table }}
 <table>
-    <thead>
+  <thead>
+    {{! For the table header row, we print the DB attribute names }}
         <tr>
-            <th>Artist ID</th>
-            <th>Full Name</th>
-            <th>Number of Artworks</th>
+            {{#each Summary.[0]}}
+            <th>
+                {{@key}}
+            </th>
+            {{/each}}
             <th></th>
         </tr>
-    </thead>
-    <tbody>
-        {{#each Summary}}
-        <tr>
-            <td>{{this.artistID}}</td>
-            <td>{{this.fullName}}</td>
-            <td>{{this.artworkCount}}</td>
-            <td>
-                <form action="/edit-artist/{{this.artistID}}" method="get">
-                    <button type="submit">Update</button>
-                </form>
-            </td>
-        </tr>
-        {{/each}}
-    </tbody>
+  </thead>
+  <tbody>
+    {{#each Summary}}
+      <tr>
+        <td>{{this.ID}}</td>
+        <td>{{this.Artist_Name}}</td>
+        <td>{{this.Artwork_Count}}</td>
+        <td>
+          <a href="/edit-artist/{{this.ID}}">Update</a>
+        </td>
+      </tr>
+    {{/each}}
+  </tbody>
 </table>
