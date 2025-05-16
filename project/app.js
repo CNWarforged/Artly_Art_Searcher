@@ -71,7 +71,7 @@ app.get('/artperiods', async function (req, res) {
     try {
         // Create and execute our queries
         const query1 = `SELECT periodID AS 'Period', century AS 'Century', \
-            centuryPart AS 'Century_Part' FROM ArtPeriods`;
+            centuryPart AS 'Century_Part' FROM ArtPeriods;`;
         const [ArtPeriods] = await db.query(query1);
 
         // Render the artperiods.hbs file, and also send the renderer
@@ -122,7 +122,7 @@ app.get('/locations', async function (req, res) {
         // Create and execute our queries
         const query1 = `SELECT locationID AS 'ID', country AS 'Country', \
             state AS 'State', city AS 'City' \
-            FROM Locations`;
+            FROM Locations;`;
         const [Locations] = await db.query(query1);
 
         // Render the locations.hbs file, and also send the renderer
@@ -141,7 +141,7 @@ app.get('/gendercodes', async function (req, res) {
     try {
         // Create and execute our queries
         const query1 = `SELECT genderID AS 'ID', description AS 'Description' \
-            FROM GenderCodes`;
+            FROM GenderCodes;`;
         const [GenderCodes] = await db.query(query1);
 
         // Render the gendercodes.hbs file, and also send the renderer
@@ -160,7 +160,7 @@ app.get('/mediums', async function (req, res) {
     try {
         // Create and execute our queries
         const query1 = `SELECT mediumID AS 'ID', mediumDescription AS 'Description' \
-            FROM Mediums`;
+            FROM Mediums;`;
         const [Mediums] = await db.query(query1);
 
         // Render the mediums.hbs file, and also send the renderer
@@ -197,14 +197,13 @@ app.get('/edit-artist/:ID', async function (req, res) {
             SELECT artistID AS 'ID', fullName AS 'Artist_Name', genderCode AS 'Gender', \
                 queer AS 'Queer', residenceLocID AS 'Residence', birthLocID AS 'Birthplace' \
             FROM Artists WHERE artistID = ?;`, [ID]);
-
         const [Artworks] = await db.query(`
-            SELECT a.artworkID AS 'Artwork_ID', a.artName AS 'Artwork_Name', a.digitalArt AS 'Digital_Art', \
-                DATE_FORMAT(a.dateCreated, '%Y-%m-%d') AS 'Date', a.artPeriodCode AS 'Period', \
-                a.artMediumCode AS 'Medium' \
-            FROM Artworks a \ 
-            JOIN ArtistArtworks aa ON a.artworkID = aa.artworkID \ 
-            WHERE aa.artistID = ?;`, [ID]);
+            SELECT Artworks.artworkID AS 'Artwork_ID', Artworks.artName AS 'Artwork_Name', Artworks.digitalArt AS 'Digital_Art', \
+            DATE_FORMAT(Artworks.dateCreated, '%Y-%m-%d') AS 'Date', Artworks.artPeriodCode AS 'Period', \
+			Artworks.artMediumCode AS 'Medium' \
+            FROM Artworks \
+            JOIN ArtistArtworks ON Artworks.artworkID = ArtistArtworks.artworkID \
+            WHERE ArtistArtworks.artistID = ?;`, [ID]);
         const [Locations] = await db.query(`
             SELECT locationID AS 'Location', country AS 'Country', state AS 'State', \
                 city AS 'City'
