@@ -44,11 +44,11 @@ app.get('/artists', async function (req, res) {
         // Create and execute our queries
         // In query1, we use a JOIN clause to display the names of the locations
         const query1 = `SELECT Artists.artistID as 'ID', Artists.fullName AS 'Name', \
-            Artists.genderCode AS 'Gender', Artists.queer AS 'Queer', \
-            Artists.residenceLocID AS 'Residence', \
-            Artists.birthLocID AS 'Birthplace', \
-            Locations.country AS 'Country', Locations.state AS 'State' FROM Artists \
-            LEFT JOIN Locations ON Artists.birthLocID = Locations.locationID 
+            GenderCodes.description AS 'Gender', Artists.queer AS 'Queer', \
+            Locations.country AS 'Country', Locations.state AS 'State', Locations.city AS 'City' \
+            FROM Artists \
+            LEFT JOIN Locations ON Artists.birthLocID = Locations.locationID \
+            JOIN GenderCodes on Artists.genderCode = GenderCodes.genderID 
             ORDER BY Artists.fullName ASC;`;
         const query2 = 'SELECT * FROM Locations;';
         const query3 = "SELECT * FROM GenderCodes;";
@@ -90,13 +90,17 @@ app.get('/artworks', async function (req, res) {
     try {
         // Create and execute our queries
         // In query1, we use a JOIN clause to display the name of the artist
-        const query1 = `SELECT Artworks.artworkID AS 'Artwork_ID', Artworks.digitalArt AS 'Digital_Art', \
-            DATE_FORMAT(Artworks.dateCreated, '%Y-%m-%d') AS 'Date', Artworks.artPeriodCode AS 'Period', \
-            Artworks.artMediumCode AS 'Medium', Artworks.artName AS 'Artwork_Name', \
+        const query1 = `SELECT Artworks.artworkID AS 'Artwork_ID', \
+            Artworks.digitalArt AS 'Digital_Art', \
+            DATE_FORMAT(Artworks.dateCreated, '%Y-%m-%d') AS 'Date', ArtPeriods.century, \
+            ArtPeriods.centuryPart, 
+            Mediums.mediumDescription AS 'Medium', Artworks.artName AS 'Artwork_Name', \
             Artists.fullName AS 'Artist_Name' \
             FROM Artworks \
+            JOIN ArtPeriods ON Artworks.artPeriodCode = ArtPeriods.periodID \
+            JOIN Mediums ON Artworks.artMediumCode = Mediums.mediumID \
             JOIN Artists ON Artists.artistID = (SELECT artistID FROM ArtistArtworks \
-            WHERE ArtistArtworks.artworkID = Artworks.artworkID)
+            WHERE ArtistArtworks.artworkID = Artworks.artworkID) \ 
             ORDER BY Artworks.artName ASC;`;
         const query2 = 'SELECT * FROM ArtPeriods;';
         const query3 = 'SELECT * FROM Mediums;';

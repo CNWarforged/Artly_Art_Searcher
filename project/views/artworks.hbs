@@ -8,11 +8,13 @@
     <thead>
         {{! For the table header row, we print the DB attribute names }}
         <tr>
-            {{#each Artworks.[0]}}
-            <th>
-                {{@key}}
-            </th>
-            {{/each}}
+            <th>ID</th>
+            <th>Digital_Art</th>
+            <th>Date</th>
+            <th>Century</th>
+            <th>Medium</th>
+            <th>Artwork_Name</th>
+            <th>Artist_Name</th>
             <th></th>
         </tr>
     </thead>
@@ -24,7 +26,7 @@
             <td>{{this.Artwork_ID}}</td>
             <td>{{this.Digital_Art}}</td>
             <td>{{this.Date}}</td>
-            <td>{{this.Period}}</td>
+            <td>{{this.centuryPart}} {{this.century}}</td>
             <td>{{this.Medium}}</td>
             <td>{{this.Artwork_Name}}</td>
             <td>{{this.Artist_Name}}</td>

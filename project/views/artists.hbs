@@ -8,11 +8,13 @@
     <thead>
         {{! For the table header row, we print the DB attribute names }}
         <tr>
-            {{#each Artists.[0]}}
-            <th>
-                {{@key}}
-            </th>
-            {{/each}}
+           <th>ID</th>
+            <th>Name</th>
+            <th>Gender</th>
+            <th>Queer</th>
+            <th>Country</th>
+            <th>State</th>
+            <th>City</th>
             <th></th>
         </tr>
     </thead>
@@ -25,10 +27,9 @@
             <td>{{this.Name}}</td>
             <td>{{this.Gender}}</td>
             <td>{{this.Queer}}</td>
-            <td>{{this.Residence}}</td>
-            <td>{{this.Birthplace}}</td>
             <td>{{this.Country}}</td>
             <td>{{this.State}}</td>
+            <td>{{this.City}}</td>
 
             {{! DELETE form }}
             <form id='delete_artist_form'>
