@@ -91,7 +91,11 @@ app.get('/artworks', async function (req, res) {
         // Create and execute our queries
         // In query1, we use a JOIN clause to display the name of the artist
         const query1 = `SELECT Artworks.artworkID AS 'Artwork_ID', \
-            Artworks.digitalArt AS 'Digital_Art', \
+            Artworks.digitalArt, \
+            CASE 
+            WHEN Artworks.digitalArt = 1 THEN 'Yes'
+            WHEN Artworks.digitalArt = 0 THEN 'No'
+            END AS 'Digital_Art',
             DATE_FORMAT(Artworks.dateCreated, '%Y-%m-%d') AS 'Date', ArtPeriods.century, \
             ArtPeriods.centuryPart, 
             Mediums.mediumDescription AS 'Medium', Artworks.artName AS 'Artwork_Name', \
