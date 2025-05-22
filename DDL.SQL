@@ -34,8 +34,10 @@ CREATE TABLE `ArtPeriods` (
 );
 
 INSERT INTO `ArtPeriods` 
-VALUES ('18e','1700','early'),('18l','1700','late'),('18m','1700','mid'),('19e','1800','early'),('19l','1800','late'),('19m','1800','mid'),
-('20e','1900','early'),('20l','1900','late'),('20m','1900','mid'),('21e','2000','early'),('21l','2000','late'),('21m','2000','mid');
+	VALUES ('18e','1700','early'),('18l','1700','late'),('18m','1700','mid'),
+	('19e','1800','early'),('19l','1800','late'),('19m','1800','mid'),
+	('20e','1900','early'),('20l','1900','late'),('20m','1900','mid'),
+	('21e','2000','early'),('21l','2000','late'),('21m','2000','mid');
 
 --
 -- Table: `GenderCodes`
@@ -112,10 +114,12 @@ CREATE TABLE `Artists` (
   CONSTRAINT `birthLocID` FOREIGN KEY (`birthLocID`) REFERENCES `Locations` (`locationID`) ON DELETE CASCADE
 );
 
-INSERT INTO `Artists` 
-VALUES (1,'Michael Whelan','M',NULL,NULL,(SELECT locationID FROM Locations WHERE state = "CA")),
-(2,'Vincent Van Gogh','M',NULL,NULL,(SELECT locationID FROM Locations WHERE city = "Mexico City")),
-(3,'Frida Kahlo','F',NULL,NULL,(SELECT locationID FROM Locations WHERE city = "Mexico City"));
+INSERT INTO Artists VALUES 
+    (1, "Michael Whelan",'M',0,NULL, (SELECT locationID FROM Locations WHERE state = "CA")),
+    (2, "Vincent Van Gogh",'M',0,NULL,(SELECT locationID FROM Locations WHERE country = "The Netherlands")),
+    (3, "Frida Kahlo",'F',0,NULL, (SELECT locationID FROM Locations WHERE city = "Mexico City")),
+	(4, "Andy Warhol", "M", 1, NULL, (SELECT locationID FROM Locations WHERE state = "PA")),
+	(5, "Jean-Michel Basquiat", "M", 1, NULL, (SELECT locationID FROM Locations WHERE state = "NY"));
 
 --
 -- Table: `Artworks`
@@ -134,12 +138,13 @@ CREATE TABLE `Artworks` (
   CONSTRAINT `periodID` FOREIGN KEY (`artPeriodCode`) REFERENCES `ArtPeriods` (`periodID`) ON DELETE CASCADE
 );
 
-INSERT INTO `Artworks` 
-VALUES (1,0,'1889-06-01','19l','O','Starry Night'),
-(2,0,'1888-08-01','19l','O','Vase With Fifteen Sunflowers'),
-(3,0,'1988-01-01','20l','A','Catspaw'),
-(4,0,'1939-01-01','20m','O','The Two Fridas'),
-(5,0,'1944-01-01','20m','O','The Broken Column');
+  INSERT INTO Artworks VALUES 
+    (1,0,'1889-06-01','19l','O','Starry Night'),
+    (2,0,'1888-08-01','19l','O','Vase With Fifteen Sunflowers'),
+    (3,0,'1988-01-01','20l','A','Catspaw'),
+    (4,0,'1939-01-01','20m','O','The Two Fridas'),
+    (5,0,'1944-01-01','20m','O','The Broken Column'),
+	(6,0,'1985-01-01','20l','A','Olympic Rings');
 
 --
 -- Table: `ArtistArtworks`
@@ -155,12 +160,14 @@ CREATE TABLE `ArtistArtworks` (
   CONSTRAINT `fkArtworks` FOREIGN KEY (`artworkID`) REFERENCES `Artworks` (`artworkID`) ON DELETE CASCADE
 );
 
-INSERT INTO ArtistArtworks (artistID, artworkID) 
-VALUES ((SELECT artistID FROM Artists WHERE fullName = "Michael Whelan"), (SELECT artworkID FROM Artworks WHERE artName = "Catspaw")), 
-((SELECT artistID FROM Artists WHERE fullName = "Vincent Van Gogh"), (SELECT artworkID FROM Artworks WHERE artName = "Starry Night")), 
-((SELECT artistID FROM Artists WHERE fullName = "Vincent Van Gogh"), (SELECT artworkID FROM Artworks WHERE artName = "Vase With Fifteen Sunflowers")), 
-((SELECT artistID FROM Artists WHERE fullName = "Frida Kahlo"), (SELECT artworkID FROM Artworks WHERE artName = "The Two Fridas")), 
-((SELECT artistID FROM Artists WHERE fullName = "Frida Kahlo"), (SELECT artworkID FROM Artworks WHERE artName = "The Broken Column"));
+INSERT INTO ArtistArtworks VALUES 
+    (1, (SELECT artistID FROM Artists WHERE fullName = "Michael Whelan"), (SELECT artworkID FROM Artworks WHERE artName = "Catspaw")), 
+    (2, (SELECT artistID FROM Artists WHERE fullName = "Vincent Van Gogh"), (SELECT artworkID FROM Artworks WHERE artName = "Starry Night")), 
+    (3, (SELECT artistID FROM Artists WHERE fullName = "Vincent Van Gogh"), (SELECT artworkID FROM Artworks WHERE artName = "Vase With Fifteen Sunflowers")), 
+    (4, (SELECT artistID FROM Artists WHERE fullName = "Frida Kahlo"), (SELECT artworkID FROM Artworks WHERE artName = "The Broken Column")), 
+    (5, (SELECT artistID FROM Artists WHERE fullName = "Frida Kahlo"), (SELECT artworkID FROM Artworks WHERE artName = "The Two Fridas")),
+	(6, (SELECT artistID FROM Artists WHERE fullName = "Andy Warhol"), (SELECT artworkID FROM Artworks WHERE artName = "Olympic Rings")),
+	(7, (SELECT artistID FROM Artists WHERE fullName = "Jean-Michel Basquiat"), (SELECT artworkID FROM Artworks WHERE artName = "Olympic Rings"));
 
 SET FOREIGN_KEY_CHECKS=1;
 COMMIT;
