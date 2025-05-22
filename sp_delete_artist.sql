@@ -19,11 +19,13 @@
 
 DROP PROCEDURE IF EXISTS sp_delete_artist;
 
-DELIMITER $$
+DELIMITER //
 
 CREATE PROCEDURE sp_delete_artist(IN in_artistID INT, OUT statusMessage VARCHAR(100))
 BEGIN
   DECLARE artist_exists INT DEFAULT 0;
+
+  -- Error handling
   DECLARE EXIT HANDLER FOR SQLEXCEPTION 
   BEGIN
     ROLLBACK;
@@ -41,21 +43,23 @@ BEGIN
     ROLLBACK;
     SET statusMessage = 'Error, artist ID not found';
   ELSE
-    -- Delete from ArtistArtworks
+    -- First, delete entries from ArtistArtworks for this artist
     DELETE FROM ArtistArtworks
     WHERE artistID = in_artistID;
 
-    -- Delete associated artworks that no longer have an artist (if applicable)
+    -- Then, delete artworks with no remaining artist links
     DELETE FROM Artworks
-    WHERE artworkID NOT IN (SELECT DISTINCT artworkID FROM ArtistArtworks);
+    WHERE artworkID NOT IN (
+      SELECT DISTINCT artworkID FROM ArtistArtworks
+    );
 
-    -- Delete from Artists
+    -- Finally, delete the artist
     DELETE FROM Artists
     WHERE artistID = in_artistID;
 
     COMMIT;
-    SET statusMessage = 'Artist and artworks deleted';
+    SET statusMessage = 'Artist deleted. Orphaned artworks removed.';
   END IF;
-END$$
+END //
 
 DELIMITER ;

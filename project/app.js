@@ -44,7 +44,11 @@ app.get('/artists', async function (req, res) {
         // Create and execute our queries
         // In query1, we use a JOIN clause to display the names of the locations
         const query1 = `SELECT Artists.artistID as 'ID', Artists.fullName AS 'Name', \
-            GenderCodes.description AS 'Gender', Artists.queer AS 'Queer', \
+            GenderCodes.description AS 'Gender', Artists.queer, \
+            CASE \
+            WHEN Artists.queer = 1 THEN 'Yes' \
+            WHEN Artists.queer = 0 THEN 'No' \
+            END AS Queer, \
             Locations.country AS 'Country', Locations.state AS 'State', Locations.city AS 'City' \
             FROM Artists \
             LEFT JOIN Locations ON Artists.birthLocID = Locations.locationID \
@@ -90,21 +94,19 @@ app.get('/artworks', async function (req, res) {
     try {
         // Create and execute our queries
         // In query1, we use a JOIN clause to display the name of the artist
-        const query1 = `SELECT Artworks.artworkID AS 'Artwork_ID', \
-            Artworks.digitalArt, \
-            CASE 
-            WHEN Artworks.digitalArt = 1 THEN 'Yes'
-            WHEN Artworks.digitalArt = 0 THEN 'No'
-            END AS 'Digital_Art',
-            DATE_FORMAT(Artworks.dateCreated, '%Y-%m-%d') AS 'Date', ArtPeriods.century, \
-            ArtPeriods.centuryPart, 
-            Mediums.mediumDescription AS 'Medium', Artworks.artName AS 'Artwork_Name', \
-            Artists.fullName AS 'Artist_Name' \
+        const query1 = `SELECT Artworks.artworkID, Artworks.digitalArt, \
+            CASE \
+            WHEN Artworks.digitalArt = 1 THEN 'Yes' \
+            WHEN Artworks.digitalArt = 0 THEN 'No' \
+            END AS digitalArt, \
+            DATE_FORMAT(Artworks.dateCreated, '%Y-%m-%d') AS dateCreated, ArtPeriods.century, \
+            ArtPeriods.centuryPart, Mediums.mediumDescription, Artworks.artName, \
+            Artists.fullName \
             FROM Artworks \
-            JOIN ArtPeriods ON Artworks.artPeriodCode = ArtPeriods.periodID \
+            JOIN ArtPeriods ON Artworks.artPeriodCode = ArtPeriods.periodID \ 
             JOIN Mediums ON Artworks.artMediumCode = Mediums.mediumID \
-            JOIN Artists ON Artists.artistID = (SELECT artistID FROM ArtistArtworks \
-            WHERE ArtistArtworks.artworkID = Artworks.artworkID) \ 
+            JOIN ArtistArtworks ON Artworks.artworkID = ArtistArtworks.artworkID \
+            JOIN Artists ON ArtistArtworks.artistID = Artists.artistID \
             ORDER BY Artworks.artName ASC;`;
         const query2 = 'SELECT * FROM ArtPeriods;';
         const query3 = 'SELECT * FROM Mediums;';
@@ -272,6 +274,54 @@ app.post('/update-artwork/:Artwork_ID', async function (req, res) {
         res.status(500).send('Failed to update artwork.');
     }
 });
+
+app.post('/reset-database', async (req, res) => {
+    try {
+      const [result] = await db.query('CALL sp_load_artlydb();');
+      console.log('Reset result:', result);
+      res.redirect('/artist-summary');
+    } catch (err) {
+      console.error('Error resetting database:', err);
+      res.status(500).send(`Database reset failed. ${err.message}`);
+    }
+  });
+  
+
+app.post('/artists/delete/:id', async function (req, res) {
+    const artistID = parseInt(req.params.id);
+    try {
+      await db.query('CALL sp_delete_artist(?, @statusMessage)', [artistID]);
+      const [[{ statusMessage }]] = await db.query('SELECT @statusMessage AS statusMessage');
+  
+      console.log('Delete status:', statusMessage); // optional
+  
+      res.redirect('/artists'); // Refresh artists page
+    } catch (error) {
+      console.error('Error deleting artist:', error);
+      res.status(500).send('Error deleting artist.');
+    }
+  });
+
+  app.post('/artworks/delete/:id', async function (req, res) {
+    const artworkID = parseInt(req.params.id);
+  
+    try {
+      // Call the stored procedure
+      await db.query('CALL sp_delete_artwork(?, @statusMessage)', [artworkID]);
+  
+      // Get the output message from the procedure
+      const [[{ statusMessage }]] = await db.query('SELECT @statusMessage AS statusMessage');
+  
+      console.log('Delete status:', statusMessage); 
+  
+      res.redirect('/artworks');
+    } catch (error) {
+      console.error('Error deleting artwork:', error);
+      res.status(500).send('Failed to delete artwork.');
+    }
+  });
+  
+  
 
 // ########################################
 // ########## LISTENER

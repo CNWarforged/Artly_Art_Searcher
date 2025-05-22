@@ -9,12 +9,12 @@
         {{! For the table header row, we print the DB attribute names }}
         <tr>
             <th>ID</th>
-            <th>Digital_Art</th>
+            <th>Digital Art</th>
             <th>Date</th>
             <th>Century</th>
             <th>Medium</th>
-            <th>Artwork_Name</th>
-            <th>Artist_Name</th>
+            <th>Artwork Name</th>
+            <th>Artist Name</th>
             <th></th>
         </tr>
     </thead>
@@ -23,24 +23,19 @@
         {{! For each row, print the id, digital art, date it was created, art period code, art medium code, and art name }}
         {{#each Artworks}}
         <tr>
-            <td>{{this.Artwork_ID}}</td>
-            <td>{{this.Digital_Art}}</td>
-            <td>{{this.Date}}</td>
+            <td>{{this.artworkID}}</td>
+            <td>{{this.digitalArt}}</td>
+            <td>{{this.dateCreated}}</td>
             <td>{{this.centuryPart}} {{this.century}}</td>
-            <td>{{this.Medium}}</td>
-            <td>{{this.Artwork_Name}}</td>
-            <td>{{this.Artist_Name}}</td>
+            <td>{{this.mediumDescription}}</td>
+            <td>{{this.artName}}</td>
+            <td>{{this.fullName}}</td>
             
-            {{! DELETE form }}
-            <form id='delete_artwork_form'>
-                <input type='hidden' name='delete_artwork_id' value='{{this.Artwork_ID}}' />
-                <input type='hidden' name='delete_artwork_name' value='{{this.Artwork_Name}}' />
-                <td>
-                    <button type='submit'>
-                        Delete
-                    </button>
-                </td>
-            </form>
+             <td>
+                <form action="/artworks/delete/{{this.artworkID}}" method="POST" style="display:inline;">
+                    <button type="submit" class="delete-btn">Delete</button>
+                </form>
+            </td>
         </tr>
         {{/each}}
     </tbody>
@@ -85,7 +80,7 @@
 
     <label for='create_artwork_digitalArt'>Digital Art: </label>
     <input type='checkbox' name='create_artwork_digitalArt' value="1" 
-        {{#if this.Digital_Art}}checked{{/if}} id='create_artwork_digitalArt' />
+        {{#if this.digitalArt}}checked{{/if}} id='create_artwork_digitalArt' />
 
     <input type='submit' />
 </form>
@@ -97,10 +92,10 @@
     <select name='update_artwork_id' id='update_artwork_id' required>
         <option value='' disabled selected>Select an Artwork</option>
         {{#each Artworks}}
-        <option value='{{this.Artwork_ID}}' required>
-            {{this.Artwork_ID}}
+        <option value='{{this.artworkID}}' required>
+            {{this.artworkID}}
             -
-            {{this.Artwork_Name}}
+            {{this.artName}}
         </option>
         {{/each}}
     </select>
@@ -144,7 +139,7 @@
 
     <label for='update_artwork_digitalArt'>Digital Art: </label>
     <input type='checkbox' name='update_artwork_digitalArt' value="1" 
-        {{#if this.Digital_Art}}checked{{/if}} id='update_artwork_digitalArt' />
+        {{#if this.digitalArt}}checked{{/if}} id='update_artwork_digitalArt' />
 
     <input type='submit' />
 </form>
