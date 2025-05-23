@@ -19,6 +19,10 @@ The feedback from other users on our project for the Step 3 draft was found on t
 https://edstem.org/us/courses/76857/discussion/6677618
 
 The TA’s feedback was from the rubric and grading board.
+On: 5/13/2025:
+For: home.hbs, artists.hbs, artworks.hbs, locations.hbs, gendercodes.hbs, mediums.hbs, CSS
+Source: Class exploration - Web Application Technology
+Starter code from class was used to model our basic webpages and the start of our CSS
 
 On: 5/13/2025
 For: sp_load_artlydb
@@ -67,8 +71,6 @@ The prompt used was:
 “Please write a stored procedure for Artists from the above schema called sp_delete_artist that will take an artist ID and will delete the artist from the ArtistArtworks table, and then will delete the artist from the Artists table, as well as deleting any associated artworks they had in the Artworks table. Please put these queries inside of a transaction so that if any of the queries fail they rollback.
 If successful return "Artist and artworks deleted". Otherwise return "Error, artist not deleted". Please also write tests to verify the stored procedure functioned correctly. Thank you!”
 
-On: 5/13/2025
-For: sp_delete_artwork
 Source: https://chatgpt.com/
 ChatGPT AI was used to make a stored proc sp_delete_artwork.
 The prompt used was: 
@@ -101,3 +103,28 @@ For: sp_update_artwork_partial
 Source: https://chatgpt.com/
 ChatGPT AI was used to make a stored proc sp_update_artwork_partial.
 The prompt used was: 
+“Could you now write me an update stored procedure for the schema for Maria DB to update any field in the Artwork table, including the artwork ID? It will also need to make sure that if the artwork ID is updated to update the corresponding data in the ArtistArtworks table.”
+
+On: 5/14/2025
+For: New page: artist-summary (We had the other pages but wanted a page to make updating the table easy to see), edit-artists
+Source: https://chatgpt.com/
+ChatGPT AI was used to help with the artist-summary page.
+The prompt used was: 
+“That DDL (and eventually the stored procs I had you make) is the backend database for my class webpage, which is called Artly Art Searcher and is meant to be a developer-side archive for artists and art. I have some of the skeletons for the pages using Node.JS with Handlebars. I have a few pages, but want to make a combination page where Artists will be shown using the view I had you make that had a count of each artist's number of artworks. I want to have that query be its own page, with a button in the table for "Update" that will take the user to a page where a new query would only show the selected artist and then a list of each of their artworks. That page would be where the user can edit the artist, their artworks, or the connection between them. Here's what I have so far (very rough so far I know! I just started this part.)”
+As a part of this prompt result the edit-artists page was also created initially by AI and then edited.
+
+On: 5/21/2025 
+For: Code and placement for Reset Button on artist-summary.hbs page
+Source: chatgpt.com
+ChatGPT AI was use to figure out what we were doing wrong with our code to make a reset button for our form.
+The prompt used was: 
+I'm still getting the hang of javascript! My next immediate task is to implement a button on one of the webpages to allow a user to reset the database. I have the stored procedure already with my DDL in it, so that part is good. I added a reset button on this page, but would like to know if that seems like the right sort of button.”
+[ Code for the artist-summary.hbs page ]
+
+Citation for AI use:
+On 5/22/2025
+For: The POST app.js statements to call the stored procedures for our deletes
+Source: chatgpt.com
+ChatGPT was used to figure out the format for the post statements for our deletes
+The prompt used was: 
+“What should the app.js side look like for using a "delete" button on the artists page to call the sp_delete_artist stored procedure?”
