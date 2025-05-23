@@ -1,61 +1,142 @@
 
 :root {
-    --heading-size: 150%;
-    --light-turqoise: #79D9CF;
-    --yellow-gray: #F9F6EF;
-    --sunflower-yellow: #F5C650;
-    --sunflower-orange: #F2911B;
-    --seed-brown: #3F210F;
-  }
-
-  .sofia-sans-condensed-myBasicFontChoice {
-    font-family: "Sofia Sans Condensed", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 80;
-    font-style: normal;
-    }
-
-.special-elite-regular {
-    font-family: "Special Elite", system-ui;
-    font-weight: 400;
-    font-style: normal;
-  }
-
-  body {      
-    background-color: var(--yellow-gray);
-    background-image: url(/images/van-gogh-sunflowers.png);
-    background-repeat: no-repeat, transparent;
-    background-size: cover;
-    background-attachment: fixed;
-    background-position: top left;
-    background-repeat: no-repeat;
-    color: var(--pale-sky-blue);
-    font-family: "Sofia Sans Condensed", sans-serif;
-    font-size: 1.2em;
-    line-height: 1.2;
-    margin: 2% 8%;
-    padding: 0;
-    display: block;
-  }
-
-h1, h2 { margin-left: 16px;}
-table {border-collapse: collapse;margin-left: 32px;}
-th, td {
-    border: 1px solid #ddd;
-    padding: 12px;
-    text-align: center;
+  --heading-size: 150%;
+  --light-turqoise: #79D9CF;
+  --yellow-gray: #F9F6EF;
+  --sunflower-yellow: #F5C650;
+  --sunflower-orange: #F2911B;
+  --seed-brown: #3F210F;
 }
 
-th {background-color: var(--sunflower-orange);}
-tr:nth-child(even) /*{background-color: #f9f9f9;}*/
-.cuForm { margin-left: 32px;}
-input, select { margin-bottom: 4px;margin-right: 12px;}
-nav {background-color: var(--light-turqoise);padding: 16px;}
-a {margin-left: 16px;}
-.homepageDescription {margin-left: 32px;}
+.sofia-sans-condensed-myBasicFontChoice {
+  font-family: "Sofia Sans Condensed", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 80;
+  font-style: normal;
+}
+
+.special-elite-regular {
+  font-family: "Special Elite", system-ui;
+  font-weight: 400;
+  font-style: normal;
+}
+
+h1, h2 { 
+  color: var(--seed-brown);
+  background-color: var(--sunflower-orange);
+  opacity: 100%;
+  margin: 0% auto;
+  width: 30%;
+  height: 10%;
+  border-radius: 5px;
+  text-align: center;
+}
+
+body {      
+  background-color: var(--yellow-gray);
+  background-image: url(/images/van-gogh-sunflowers.png);
+  background-repeat: no-repeat, transparent;
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: top left;
+  background-repeat: no-repeat;
+  color: var(--pale-sky-blue);
+  font-family: "Sofia Sans Condensed", sans-serif;
+  font-size: 1.2em;
+  line-height: 1.2;
+  margin: 2% 8%;
+  padding: 0;
+  display: block;
+}
+
+article {
+  display: block;
+  unicode-bidi: isolate;
+  border-top: 2px dotted var(--seed-brown);
+  border-right: 2px dotted var(--seed-brown);
+  border-bottom: 2px dotted var(--seed-brown);
+  border-left: 2px dotted var(--seed-brown); 
+  background-color: var(--light-turqoise);
+  padding: 2% 4%;
+  width: 80%;
+  opacity: 75%;
+  box-sizing: border-box;
+  margin: 2% 10%;
+  strong {color: var(--seed-brown)};
+  border-radius: 15px;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: center;
+}
+
+th {
+  background-color: var(--sunflower-orange);
+}
+
+tr:nth-child(even)
+
+.cuForm { 
+  margin-left: 32px;
+}
+
+input, select { 
+  margin-bottom: 4px;
+  margin-right: 12px;
+}
+
+a {
+  background-color: var(--light-turqoise); 
+  opacity: 90%;
+  color: var(--seed-brown);
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 8px;
+  padding: 1%;
+  font-size: 1.2em;
+  text-align: center; 
+  margin-left: 1%;
+}
+
+a:hover {
+  background-color: var(--sunflower-yellow);
+  color: var(--pale-sky-blue);
+  opacity: 80%;
+}
+
+.homepageDescription {
+  margin-left: 32px;
+}
+
+.reset-btn {
+  background-color: var(--sunflower-yellow);
+  margin-left: 45%;
+  font-size: 1em;
+  border-radius:8px;
+  font-weight:bold;
+  padding:4px;
+}
 
 table {
   border-collapse: collapse;
-  margin: 32px auto; /* Center the table horizontally */
+  margin: 32px auto;
   background-color: var(--sunflower-yellow);
+}
+
+.delete-btn {
+  background-color: var(--sunflower-orange);
+  font-size: 1em;
+  font-weight:bold;
+  padding:4px;
+  border-radius:8px;
+}
+
+.update-btn {
+  background-color: var(--sunflower-orange);
+  font-size: 1em;
+  font-weight:bold;
+  padding:4px;
+  border-radius:8px;
 }
