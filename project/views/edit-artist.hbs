@@ -20,34 +20,23 @@
         {{/each}}
     </select><br>
 
-  <label for='update_artist_birth_state'>Artist Birth State/Providence: </label>
-  <select name='birthLocID' id='update_artist_birth_state'>
-    <option value='NULL' disabled>Select a Location</option>
-    <option value='NULL'>&lt; None &gt;</option>
-    {{#each Locations}}
-      <option value='{{this.Location}}' {{#if (eq this.Location ../Artist.Birthplace)}}selected{{/if}}>
-        {{this.State}}
-      </option>
-    {{/each}}
-  </select>
-
-  <label for='update_artist_birth_country'>Artist Country: </label>
-  <select name='birthLocID' id='update_artist_birth_country'>
-    <option value='NULL' disabled>Select a Location</option>
-    <option value='NULL'>&lt; None &gt;</option>
-    {{#each Locations}}
-      <option value='{{this.Location}}' {{#if (eq this.Location ../Artist.Birthplace)}}selected{{/if}}>
-        {{this.Country}}
-      </option>
-    {{/each}}
-  </select>
+  <label for='birthLocID'>Artist Birth Location: </label>
+<select name='birthLocID' id='birthLocID'>
+  <option value='NULL' disabled>Select a Location</option>
+  <option value='NULL'>&lt; None &gt;</option>
+  {{#each Locations}}
+    <option value='{{this.LocationID}}' {{#if (eq this.LocationID ../Artist.Birthplace)}}selected{{/if}}>
+      {{this.State}} - {{this.Country}}
+    </option>
+  {{/each}}
+</select>
 
   <label for='update_artist_res_location'>Artist Main Residence: </label>
   <select name='residenceLocID' id='update_artist_res_location'>
     <option value='NULL' disabled>Select a Location</option>
     <option value='NULL'>&lt; None &gt;</option>
     {{#each Locations}}
-      <option value='{{this.Location}}' {{#if (eq this.Location ../Artist.Residence)}}selected{{/if}}>
+      <option value='{{this.LocationID}}' {{#if (eq this.Location this.Artist.Residence)}}selected{{/if}}>
         {{this.State}}
         -
         {{this.Country}}
@@ -55,7 +44,7 @@
     {{/each}}
   </select>
 
-  <button type="submit">Update Artist</button>
+  <button class="submit-btn" type="submit">Update Artist</button>
 </form>
 
 <h3>Associated Artworks</h3>
@@ -109,4 +98,9 @@
     {{/each}}
   </tbody>
 </table>
+
+<form action="/reset-database" method="POST" style="margin-top: 1em;">
+  <button class="reset-btn" type="submit">Reset Database</button>
+</form>
+
 </article>

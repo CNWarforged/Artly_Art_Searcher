@@ -44,13 +44,12 @@
 {{! CREATE form }}
 <h2>Add a New Artist</h2>
 <br>
-<form class='cuForm' id='create_artist_form'>
+<form class='cuForm' id='create_artist_form' method="POST" action="/artists/create">
     <label for='create_artist_fullname'>Full Name: </label>
     <input type='text' name='create_artist_fullname' id='create_artist_fullname' required />
 
     <label for='create_artist_gender'>Artist Gender: </label>
     <select name='create_artist_gender' id='create_artist_gender'>
-        <option value='NULL' disabled selected>Select a Gender</option>
         {{#each GenderCodes}}
         <option value='{{this.genderID}}' required>
             {{this.description}}
@@ -61,7 +60,7 @@
     <label for='create_artist_queer'>Queer?: </label>
     <input type='checkbox' name='create_artist_queer' value="1" 
         {{#if this.Digital_Art}}checked{{/if}} id='create_artist_queer' />
-
+        
     <label for='create_artist_birth_loc'>Birth Location: </label>
     <select name='create_artist_birth_loc' id='create_artist_birth_loc'>
         <option value='NULL' selected>Select a Location</option>

@@ -8,7 +8,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
-const PORT = 41124;
+const PORT = 62728;
 
 // Database
 const db = require('./database/db-connector');
@@ -245,20 +245,38 @@ app.get('/edit-artist/:ID', async function (req, res) {
     }
 });
 
-app.post('/update-artist/:ID', async function (req, res) {
-    const { fullName, genderCode, queer, birthLocID, residenceLocID } = req.body;
-    const ID = req.params.ID;
+app.post('/update-artist/:id', async (req, res) => {
+  const oldID = parseInt(req.params.id);
+  const {
+    fullName,
+    update_artist_gender,
+    queer,
+    residenceLocID,
+    birthLocID
+  } = req.body;
 
-    try {
-        await db.query(
-            `CALL UpdateArtistFull(?, ?, ?, ?, ?, ?, ?)`,
-            [artistID, artistID, fullName, genderCode, queer, birthLocID, residenceLocID]
-        );
-        res.redirect('/artist-summary');
-    } catch (err) {
-        console.error('Error updating artist:', err);
-        res.status(500).send('Failed to update artist.');
-    }
+  // Safely handle null-ish and checkbox inputs
+  const finalQueer = queer === '1' ? 1 : 0;
+  const gender = update_artist_gender || null;
+  const resLoc = residenceLocID === 'NULL' ? null : residenceLocID;
+  const birthLoc = birthLocID === 'NULL' ? null : birthLocID;
+
+  try {
+    // Call your stored procedure
+    await db.query(
+      `CALL sp_update_artist(?, ?, ?, ?, ?, ?, ?, @msg);`,
+      [oldID, oldID, fullName, gender, finalQueer, resLoc, birthLoc]
+    );
+
+    // Retrieve the status message
+    const [[{ statusMessage }]] = await db.query('SELECT @msg AS statusMessage;');
+    console.log('Artist update status:', statusMessage);
+
+    res.redirect('/artist-summary');
+  } catch (err) {
+    console.error('Error updating artist from edit page:', err);
+    res.status(500).send('Error while updating artist.');
+  }
 });
 
 app.post('/update-artwork/:Artwork_ID', async function (req, res) {
@@ -285,9 +303,8 @@ app.post('/reset-database', async (req, res) => {
       console.error('Error resetting database:', err);
       res.status(500).send(`Database reset failed. ${err.message}`);
     }
-  });
+});
   
-
 app.post('/artists/delete/:id', async function (req, res) {
     const artistID = parseInt(req.params.id);
     try {
@@ -301,9 +318,9 @@ app.post('/artists/delete/:id', async function (req, res) {
       console.error('Error deleting artist:', error);
       res.status(500).send('Error deleting artist.');
     }
-  });
+});
 
-  app.post('/artworks/delete/:id', async function (req, res) {
+app.post('/artworks/delete/:id', async function (req, res) {
     const artworkID = parseInt(req.params.id);
   
     try {
@@ -320,8 +337,9 @@ app.post('/artists/delete/:id', async function (req, res) {
       console.error('Error deleting artwork:', error);
       res.status(500).send('Failed to delete artwork.');
     }
-  });
-  app.post('/artworks/update', async (req, res) => {
+});
+
+app.post('/artworks/update', async (req, res) => {
   const {
     old_artworkID,
     new_artworkID,
@@ -377,7 +395,6 @@ app.post('/artists/delete/:id', async function (req, res) {
   }
 });
 
-
 app.post('/artists/update', async (req, res) => {
   const {
     old_artistID,
@@ -430,6 +447,94 @@ app.post('/artists/update', async (req, res) => {
     res.status(500).send('An error occurred while updating the artist.');
   }
 });
+
+app.post('/artists/create', async (req, res) => {
+  const {
+    create_artist_fullname,
+    create_artist_gender,
+    create_artist_queer,
+    create_artist_res_loc,
+    create_artist_birth_loc
+  } = req.body;
+
+  const queer = create_artist_queer === '1' ? 1 : 0;
+  const resLoc = create_artist_res_loc === 'NULL' ? null : create_artist_res_loc;
+  const birthLoc = create_artist_birth_loc === 'NULL' ? null : create_artist_birth_loc;
+
+  try {
+    // Step 1: Call the stored procedure
+    await db.query(
+      'CALL sp_insert_artist(?, ?, ?, ?, ?, @new_id);',
+      [
+        create_artist_fullname,
+        create_artist_gender,
+        queer,
+        resLoc,
+        birthLoc
+      ]
+    );
+
+    // Step 2: Retrieve the output artist ID
+    const [[{ artistID }]] = await db.query('SELECT @new_id AS artistID;');
+
+    console.log('New Artist Inserted, ID:', artistID);
+    res.redirect('/artists');
+  } catch (err) {
+    console.error('Error inserting artist:', err);
+    res.status(500).send('An error occurred while inserting the artist.');
+  }
+});
+
+app.post('/artworks/create', async (req, res) => {
+  const {
+    create_artwork_name,
+    create_artwork_digitalArt,
+    create_artwork_datecreated,
+    create_artwork_artPeriodCode,
+    create_artwork_artmediumcode,
+    create_artwork_artist
+  } = req.body;
+
+  const digital = create_artwork_digitalArt === '1' ? 1 : 0;
+  const dateCreated = create_artwork_datecreated || null;
+  const period = create_artwork_artPeriodCode || null;
+  const medium = create_artwork_artmediumcode || null;
+  const name = create_artwork_name || null;
+  const artistID = create_artwork_artist;
+
+  if (artistID === 'NULL' || !artistID) {
+    return res.status(400).send('Artwork must have an associated artist.');
+  }
+
+  try {
+    // 1. Insert the artwork and get the new ID
+    await db.query(
+      'CALL sp_insert_artwork(?, ?, ?, ?, ?, @new_artwork_id);',
+      [digital, dateCreated, period, medium, name]
+    );
+
+    const [[{ artworkID }]] = await db.query('SELECT @new_artwork_id AS artworkID;');
+
+    if (!artworkID) {
+      return res.status(500).send('Failed to retrieve new artwork ID.');
+    }
+
+    // 2. Link the artist to the artwork
+    await db.query(
+      'CALL sp_insert_artist_artwork(?, ?, @link_msg);',
+      [artistID, artworkID]
+    );
+
+    const [[{ linkMessage }]] = await db.query('SELECT @link_msg AS linkMessage;');
+    console.log('Link Status:', linkMessage);
+
+    res.redirect('/artworks');
+  } catch (err) {
+    console.error('Error creating artwork with artist link:', err);
+    res.status(500).send('An error occurred while creating the artwork.');
+  }
+});
+
 
 // ########################################
 // ########## LISTENER

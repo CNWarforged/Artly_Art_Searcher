@@ -517,27 +517,112 @@ DELIMITER ;
 
 -- ------------------------------------
 
+-- Citation for AI use:
+-- On: 5/13/2025
+-- For: sp_insert_artwork
+-- Source: https://chatgpt.com/
+-- ChatGPT AI was used to make a stored proc sp_insert_artwork.
+-- The prompt used was: 
+-- “Could you also create a stored procedure called sp_insert_artwork that will 
+-- use MariaDB and will insert an artwork into the Artworks table and then return the newly created ID?”
 
+DROP PROCEDURE IF EXISTS sp_insert_artist;
 
+DELIMITER //
 
+CREATE PROCEDURE sp_insert_artist (
+    IN p_fullName VARCHAR(300),
+    IN p_genderCode VARCHAR(10),
+    IN p_queer TINYINT,
+    IN p_residenceLocID INT,
+    IN p_birthLocID INT,
+    OUT p_artistID INT
+)
+BEGIN
+    INSERT INTO Artists (fullName, genderCode, queer, residenceLocID, birthLocID)
+    VALUES (p_fullName, p_genderCode, p_queer, p_residenceLocID, p_birthLocID);
 
+    -- Return the newly generated artistID
+    SET p_artistID = LAST_INSERT_ID();
+END //
 
-
-
+DELIMITER ;
 
 -- ------------------------------------
 
+-- Citation for AI use:
+-- On: 5/13/2025
+-- For: sp_insert_artwork
+-- Source: https://chatgpt.com/
+-- ChatGPT AI was used to make a stored proc sp_insert_artwork.
+-- The prompt used was: 
+-- “Could you also create a stored procedure called sp_insert_artwork that 
+-- will use MariaDB and will insert an artwork into the Artworks table and 
+-- then return the newly created ID?”
 
+DROP PROCEDURE IF EXISTS sp_insert_artwork;
 
+DELIMITER //
 
+CREATE PROCEDURE sp_insert_artwork (
+    IN p_digitalArt TINYINT,
+    IN p_dateCreated DATE,
+    IN p_artPeriodCode VARCHAR(10),
+    IN p_artMediumCode VARCHAR(25),
+    IN p_artName VARCHAR(150),
+    OUT p_artworkID INT
+)
+BEGIN
+    INSERT INTO Artworks (digitalArt, dateCreated, artPeriodCode, artMediumCode, artName)
+    VALUES (p_digitalArt, p_dateCreated, p_artPeriodCode, p_artMediumCode, p_artName);
 
+    SET p_artworkID = LAST_INSERT_ID();
+END //
 
+DELIMITER ;
 
 -- ------------------------------------
 
+-- Citation for AI use:
+-- On: 5/13/2025
+-- For: sp_insert_artwork
+-- Source: https://chatgpt.com/
+-- ChatGPT AI was used to make a stored proc sp_insert_artwork.
+-- The prompt used was: 
+-- Could you make me a new stored procedure to insert into the Artist_Artworks table?
 
+DROP PROCEDURE IF EXISTS sp_insert_artist_artwork;
 
+DELIMITER //
 
+CREATE PROCEDURE sp_insert_artist_artwork (
+    IN p_artistID INT,
+    IN p_artworkID INT,
+    OUT statusMessage VARCHAR(100)
+)
+BEGIN
+    DECLARE artist_exists INT;
+    DECLARE artwork_exists INT;
+
+    -- Check if the artist exists
+    SELECT COUNT(*) INTO artist_exists FROM Artists WHERE artistID = p_artistID;
+
+    -- Check if the artwork exists
+    SELECT COUNT(*) INTO artwork_exists FROM Artworks WHERE artworkID = p_artworkID;
+
+    IF artist_exists = 0 THEN
+        SET statusMessage = 'Error: artist ID not found';
+    ELSEIF artwork_exists = 0 THEN
+        SET statusMessage = 'Error: artwork ID not found';
+    ELSE
+        INSERT INTO ArtistArtworks (artistID, artworkID)
+        VALUES (p_artistID, p_artworkID);
+
+        SET statusMessage = 'Artist-Artwork link inserted successfully';
+    END IF;
+END //
+
+DELIMITER ;
 
 -- ------------------------------------
 

@@ -119,6 +119,14 @@ a:hover {
   padding:4px;
 }
 
+.submit-btn {
+  background-color: var(--sunflower-yellow);
+  font-size: .75em;
+  border-radius:8px;
+  font-weight:bold;
+  padding:4px;
+}
+
 table {
   border-collapse: collapse;
   margin: 32px auto;

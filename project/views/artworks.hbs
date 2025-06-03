@@ -44,13 +44,12 @@
 {{! CREATE form }}
 <h2>Add a New Artwork</h2>
 <br>
-<form class='cuForm' id='create_artwork_form'>
+<form class='cuForm' id='create_artwork_form' method="POST" action="/artworks/create">
     <label for='create_artwork_name'>Artwork Name: </label>
     <input type='text' name='create_artwork_name' id='create_artwork_name' />
     
     <label for='create_artwork_artist'>Artist: </label>
     <select name='create_artwork_artist' id='create_artwork_artist'>
-        <option value='NULL' selected>Select the Artist</option>
         {{#each Artists}}
         <option value='{{this.artistID}}'>{{this.fullName}}</option>
         {{/each}}
@@ -62,11 +61,10 @@
         {{#each Mediums}}
         <option value='{{this.mediumID}}'>{{this.mediumDescription}}</option>
         {{/each}}
-    </select>
+    </select><br>
 
     <label for='create_artwork_artPeriodCode'>Art Period: </label>
     <select name='create_artwork_artPeriodCode' id='create_artwork_artPeriodCode'>
-        <option value='NULL' selected>Select an Art Period</option>
         {{#each ArtPeriods}}
         <option value='{{this.periodID}}'>
             {{this.century}}
@@ -74,10 +72,10 @@
             {{this.centuryPart}}
             </option>
         {{/each}}
-    </select><br>
+    </select>
 
     <label for='create_artwork_datecreated'>Date of Creation: </label>
-    <input type='date' name='create_artwork_datecreated' id='create_artwork_datecreated' />
+    <input type='date' name='create_artwork_datecreated' id='create_artwork_datecreated' required />
 
     <label for='create_artwork_digitalArt'>Digital Art: </label>
     <input type='checkbox' name='create_artwork_digitalArt' value="1" 
@@ -127,6 +125,10 @@
     <input type='checkbox' name='digitalArt' value='1' id='update_artwork_digitalArt' />
 
     <button class="submit-btn" type='submit'>Update Artwork</button>
+</form>
+
+<form action="/reset-database" method="POST" style="margin-top: 1em;">
+  <button class="reset-btn" type="submit">Reset Database</button>
 </form>
 
 </article>
