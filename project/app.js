@@ -25,6 +25,7 @@ app.engine('.hbs',engine({
     }
 }));
 
+
 // ########################################
 // ########## ROUTE HANDLERS
 
@@ -320,8 +321,115 @@ app.post('/artists/delete/:id', async function (req, res) {
       res.status(500).send('Failed to delete artwork.');
     }
   });
-  
-  
+  app.post('/artworks/update', async (req, res) => {
+  const {
+    old_artworkID,
+    new_artworkID,
+    artName,
+    dateCreated,
+    artPeriodCode,
+    artMediumCode,
+    digitalArt
+  } = req.body;
+
+  try {
+    const [rows] = await db.query(
+      'SELECT * FROM Artworks WHERE artworkID = ?',
+      [old_artworkID]
+    );
+
+    if (rows.length === 0) {
+      return res.status(404).send('Artwork not found.');
+    }
+
+    const current = rows[0];
+
+    const parsedOldID = parseInt(old_artworkID);
+    const finalID = new_artworkID && new_artworkID.trim() !== ''
+      ? parseInt(new_artworkID)
+      : parsedOldID;
+    const finalName = artName || current.artName;
+    const finalDate = dateCreated || current.dateCreated;
+    const finalPeriod = artPeriodCode || current.artPeriodCode;
+    const finalMedium = artMediumCode || current.artMediumCode;
+    const finalDigital = digitalArt === '1' ? 1 : 0;
+
+    await db.query(
+      `CALL sp_update_artwork(?, ?, ?, ?, ?, ?, ?, @msg);`,
+      [
+        parsedOldID,
+        finalID,
+        finalDigital,
+        finalDate,
+        finalPeriod,
+        finalMedium,
+        finalName
+      ]
+    );
+
+    const [[{ statusMessage }]] = await db.query(`SELECT @msg AS statusMessage;`);
+    console.log('Update Status:', statusMessage);
+
+    res.redirect('/artworks');
+  } catch (err) {
+    console.error('Error updating artwork:', err);
+    res.status(500).send('An error occurred while updating the artwork.');
+  }
+});
+
+
+app.post('/artists/update', async (req, res) => {
+  const {
+    old_artistID,
+    new_artistID,
+    fullName,
+    genderCode,
+    queer,
+    residenceLocID,
+    birthLocID
+  } = req.body;
+
+  try {
+    const [rows] = await db.query('SELECT * FROM Artists WHERE artistID = ?', [old_artistID]);
+    if (rows.length === 0) {
+      return res.status(404).send('Artist not found.');
+    }
+
+    const current = rows[0];
+
+    const finalOldID = parseInt(old_artistID);
+    const finalNewID = new_artistID && new_artistID.trim() !== ''
+      ? parseInt(new_artistID)
+      : finalOldID;
+
+    const finalName = fullName || current.fullName;
+    const finalGender = genderCode || current.genderCode;
+    const finalQueer = queer === '1' ? 1 : 0;
+    const finalRes = residenceLocID || current.residenceLocID;
+    const finalBirth = birthLocID || current.birthLocID;
+
+    await db.query(
+      `CALL sp_update_artist(?, ?, ?, ?, ?, ?, ?, @msg);`,
+      [
+        finalOldID,
+        finalNewID,
+        finalName,
+        finalGender,
+        finalQueer,
+        finalRes,
+        finalBirth
+      ]
+    );
+
+    const [[{ statusMessage }]] = await db.query('SELECT @msg AS statusMessage;');
+    console.log('Update Status:', statusMessage);
+
+    res.redirect('/artists');
+  } catch (err) {
+    console.error('Error updating artist:', err);
+    res.status(500).send('An error occurred while updating the artist.');
+  }
+});
 
 // ########################################
 // ########## LISTENER

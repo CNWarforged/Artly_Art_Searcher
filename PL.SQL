@@ -343,3 +343,207 @@ DELIMITER ;
 
 -- ------------------------------------
 
+-- Citation for AI use
+-- On: 6/2/2025
+-- For: sp_update_artwork
+-- Source: https://chatgpt.com/
+-- ChatGPT AI was used to make a stored proc sp_update_artwork.
+-- The prompt used was: 
+-- "Okay, I had this for a stored proc to update the Artworks field. I need it to also be able to 
+-- update Artwork ID, and if that's updated to also update the Artist_Artworks table with the new Artwork ID."
+-- [ Basic stored proc I made ]
+
+DROP PROCEDURE IF EXISTS sp_update_artwork;
+DELIMITER //
+
+CREATE PROCEDURE sp_update_artwork(
+    IN in_old_artworkID INT,
+    IN in_new_artworkID INT,
+    IN in_digitalArt TINYINT,
+    IN in_dateCreated DATE,
+    IN in_artPeriodCode VARCHAR(10),
+    IN in_artMediumCode VARCHAR(25),
+    IN in_artName VARCHAR(150),
+    OUT statusMessage VARCHAR(100)
+)
+BEGIN
+    DECLARE artwork_exists INT DEFAULT 0;
+
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+    BEGIN
+        ROLLBACK;
+        SET statusMessage = 'Error, artwork not updated';
+    END;
+
+    START TRANSACTION;
+
+    -- Check if old artwork exists
+    SELECT COUNT(*) INTO artwork_exists
+    FROM Artworks
+    WHERE artworkID = in_old_artworkID;
+
+    IF artwork_exists = 0 THEN
+        ROLLBACK;
+        SET statusMessage = 'Error, artwork ID not found';
+    ELSE
+        -- If changing the ID
+        IF in_new_artworkID IS NOT NULL AND in_new_artworkID != in_old_artworkID THEN
+
+            -- Insert new record with updated ID and data
+            INSERT INTO Artworks (artworkID, digitalArt, dateCreated, artPeriodCode, artMediumCode, artName)
+            VALUES (in_new_artworkID, in_digitalArt, in_dateCreated, in_artPeriodCode, in_artMediumCode, in_artName);
+
+            -- Update all references in ArtistArtworks
+            UPDATE ArtistArtworks
+            SET artworkID = in_new_artworkID
+            WHERE artworkID = in_old_artworkID;
+
+            -- Delete the old record
+            DELETE FROM Artworks
+            WHERE artworkID = in_old_artworkID;
+
+        ELSE
+            -- Simple field update without ID change
+            UPDATE Artworks
+            SET 
+                digitalArt = in_digitalArt,
+                dateCreated = in_dateCreated,
+                artPeriodCode = in_artPeriodCode,
+                artMediumCode = in_artMediumCode,
+                artName = in_artName
+            WHERE artworkID = in_old_artworkID;
+        END IF;
+
+        COMMIT;
+        SET statusMessage = 'Artwork updated successfully';
+    END IF;
+END //
+
+DELIMITER ;
+
+-- ------------------------------------
+
+-- Citation for AI use
+-- On: 6/2/2025
+-- For: sp_update_artist
+-- Source: https://chatgpt.com/
+-- ChatGPT AI was used to make a stored proc sp_update_artist.
+-- The prompt used was: 
+-- “Okay, next could you help me with the general artists.hbs update page? 
+-- For that it'll have a similar thing where it needs to be able to update the 
+-- artist ID and also update the Artist_Artworks table with that ID as well. “
+
+DROP PROCEDURE IF EXISTS sp_update_artist;
+DELIMITER //
+
+CREATE PROCEDURE sp_update_artist(
+  IN in_old_artistID INT,
+  IN in_new_artistID INT,
+  IN in_fullName VARCHAR(300),
+  IN in_genderCode VARCHAR(10),
+  IN in_queer TINYINT,
+  IN in_residenceLocID INT,
+  IN in_birthLocID INT,
+  OUT statusMessage VARCHAR(100)
+)
+BEGIN
+  DECLARE artist_exists INT DEFAULT 0;
+  DECLARE conflict_exists INT DEFAULT 0;
+
+  DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+  BEGIN
+    ROLLBACK;
+    SET statusMessage = 'Error, artist not updated';
+  END;
+
+  START TRANSACTION;
+
+  -- Confirm artist exists
+  SELECT COUNT(*) INTO artist_exists
+  FROM Artists
+  WHERE artistID = in_old_artistID;
+
+  IF artist_exists = 0 THEN
+    ROLLBACK;
+    SET statusMessage = 'Error, artist ID not found';
+  ELSE
+    -- Check for conflict if ID is changing
+    IF in_old_artistID != in_new_artistID THEN
+      SELECT COUNT(*) INTO conflict_exists
+      FROM Artists
+      WHERE artistID = in_new_artistID;
+
+      IF conflict_exists > 0 THEN
+        ROLLBACK;
+        SET statusMessage = 'Error, new artist ID already exists. Choose a different ID';
+      ELSE
+        -- Insert new record
+        INSERT INTO Artists (
+          artistID, fullName, genderCode, queer, residenceLocID, birthLocID
+        ) VALUES (
+          in_new_artistID, in_fullName, in_genderCode, in_queer, in_residenceLocID, in_birthLocID
+        );
+
+        -- Reassign related artworks
+        UPDATE ArtistArtworks
+        SET artistID = in_new_artistID
+        WHERE artistID = in_old_artistID;
+
+        -- Delete old artist
+        DELETE FROM Artists
+        WHERE artistID = in_old_artistID;
+
+        COMMIT;
+        SET statusMessage = 'Artist updated successfully';
+      END IF;
+    ELSE
+      -- Just update artist fields if ID is not changing
+      UPDATE Artists
+      SET fullName = in_fullName,
+          genderCode = in_genderCode,
+          queer = in_queer,
+          residenceLocID = in_residenceLocID,
+          birthLocID = in_birthLocID
+      WHERE artistID = in_old_artistID;
+
+      COMMIT;
+      SET statusMessage = 'Artist updated successfully';
+    END IF;
+  END IF;
+END //
+
+DELIMITER ;
+
+
+-- ------------------------------------
+
+
+
+
+
+
+
+
+
+-- ------------------------------------
+
+
+
+
+
+
+
+-- ------------------------------------
+
+
+
+
+
+-- ------------------------------------
+
+
+
+
+
+
+-- ------------------------------------

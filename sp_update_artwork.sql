@@ -35,7 +35,7 @@
 
 DROP PROCEDURE IF EXISTS sp_update_artwork;
 
-DELIMITER $$
+DELIMITER //
 
 CREATE PROCEDURE sp_update_artwork(
     IN in_old_artworkID INT,
@@ -95,6 +95,6 @@ BEGIN
         COMMIT;
         SET statusMessage = 'Artwork updated successfully';
     END IF;
-END$$
+END // 
 
 DELIMITER ;
