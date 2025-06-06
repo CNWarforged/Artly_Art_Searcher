@@ -24,6 +24,18 @@ For: home.hbs, artists.hbs, artworks.hbs, locations.hbs, gendercodes.hbs, medium
 Source: Class exploration - Web Application Technology
 Starter code from class was used to model our basic webpages and the start of our CSS
 
+
+Source code was used and adapted from: https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web-application-technology-2?module_item_id=25352948 Used for: Creating the Node.JS starting code and the CRUD pages for our "Artists" page and home page Date: 5/6/2025
+
+Adobe Colors was used to create a color theme for our website. Source: https://color.adobe.com/create/image Used For: We used Van Gogh's Sunflowers to sample colors for the theme and used the hex code colors provided by Adobe for our web page. Date: 5/6/2025
+
+Background image for our website is Van Gogh's Sunflowers. Used for: Background image and color theme Date: 5/6/2025
+
+On: 5/13/2025:
+For: home.hbs, artists.hbs, artworks.hbs, locations.hbs, gendercodes.hbs, mediums.hbs, CSS
+Source: Class exploration - Web Application Technology
+Starter code from class was used to model our basic webpages and the start of our CSS
+
 On: 5/13/2025
 For: sp_load_artlydb
 Source: https://chatgpt.com/
@@ -85,25 +97,11 @@ The prompt used was:
 “Could you now write me an update stored procedure for the schema for Maria DB to update any field in the Artist table, including the artist ID? It will also need to make sure that if the artist ID is updated to update the corresponding data in the ArtistArtworks table.”
 
 On: 5/13/2025
-For: sp_update_artist_partial
-Source: https://chatgpt.com/
-ChatGPT AI was used to make a stored proc sp_update_artist_partial.
-The prompt used was: 
-“a version that allows partial updates would be helpful!”
-
-On: 5/13/2025
 For: sp_update_artwork
 Source: https://chatgpt.com/
 ChatGPT AI was used to make a stored proc sp_update_artwork.
 The prompt used was: 
 “Thanks! Could I have a version of that procedure for fully updating a row in Artwork?”
-
-On: 5/13/2025
-For: sp_update_artwork_partial
-Source: https://chatgpt.com/
-ChatGPT AI was used to make a stored proc sp_update_artwork_partial.
-The prompt used was: 
-“Could you now write me an update stored procedure for the schema for Maria DB to update any field in the Artwork table, including the artwork ID? It will also need to make sure that if the artwork ID is updated to update the corresponding data in the ArtistArtworks table.”
 
 On: 5/14/2025
 For: New page: artist-summary (We had the other pages but wanted a page to make updating the table easy to see), edit-artists
@@ -128,3 +126,78 @@ Source: chatgpt.com
 ChatGPT was used to figure out the format for the post statements for our deletes
 The prompt used was: 
 “What should the app.js side look like for using a "delete" button on the artists page to call the sp_delete_artist stored procedure?”
+
+
+Citation for AI use
+On: 6/2/2025
+For: sp_update_artwork
+Source: https://chatgpt.com/
+ChatGPT AI was used to make a stored proc sp_update_artwork.
+The prompt used was: 
+"Okay, I had this for a stored proc to update the Artworks field. I need it to also be able to 
+update Artwork ID, and if that's updated to also update the Artist_Artworks table with the new Artwork ID."
+[ Basic stored proc I made ]
+
+Citation for AI use
+On: 6/2/2025
+For: sp_update_artwork called from our app.js
+Source: https://chatgpt.com/
+ChatGPT AI was used to make the app.js connection to sp_update_artwork
+The prompt used was: 
+"How would I connect that to my app.js so it can be called from artworks.hbs?"
+
+Citation for AI use
+On: 6/2/2025
+For: sp_update_artist
+Source: https://chatgpt.com/
+ChatGPT AI was used to make a stored proc sp_update_artist.
+The prompt used was: 
+“Okay, next could you help me with the general artists.hbs update page? For that it'll have a similar thing where it needs to be able to update the artist ID and also update the Artist_Artworks table with that ID as well. “
+
+Citation for AI use
+On: 6/2/2025
+For: sp_update_artist called from our app.js
+Source: https://chatgpt.com/
+ChatGPT AI was used to make the app.js connection to sp_update_artist
+The prompt used was: 
+“Could you help me connect that stored procedure to be called from app.js?”
+
+Citation for AI use
+On: 6/2/2025
+For: sp_insert_artist
+Source: https://chatgpt.com/
+ChatGPT AI was used to make the front end call the stored proc sp_insert_artist
+The prompt used was: 
+“How do I connect Add a New Artist to call sp_insert_artist?”
+
+Citation for AI use
+On: 6/2/2025
+For: sp_insert_artwork called from our app.js
+Source: https://chatgpt.com/
+ChatGPT AI was used to make the app.js connection to sp_insert_artwork
+The prompt used was: 
+“[ asked for similar help for app.js as with the artists.hbs page ] This is my stored procedure for sp_insert_artwork. When I made that originally each artwork could only have one artist, but now multiple artists are allowed per artwork too. That will mean that someone is allowed to add a new artist to an existing artwork but not necessarily replace the old listed artist. Also, while we let an artist get added without an artwork, we require an artwork to have at least one artist to get added, so the artist name is a requirement.”
+
+Citation for AI use:
+On: 5/13/2025
+For: sp_insert_artwork
+Source: https://chatgpt.com/
+ChatGPT AI was used to make a stored proc sp_insert_artwork.
+The prompt used was: 
+Could you make me a new stored procedure to insert into the Artist_Artworks table?
+
+Citation for AI use:
+On: 5/13/2025
+For: sp_insert_artwork
+Source: https://chatgpt.com/
+ChatGPT AI was used to help fix the artwork insert on the app.js 
+The prompt used was: 
+Could you make me a new stored procedure to insert into the Artist_Artworks table, then give me an updated version of app.js that will call sp_insert_artwork to add an artwork and then will call the new sp_insert_artist_artwork to take care of that?
+
+Citation for AI use:
+On: 5/13/2025
+For: edit-artist.hbs and its app.js connection
+Source: https://chatgpt.com/
+ChatGPT AI was used to help fix the edit-artist insert on the app.js 
+The prompt used was: 
+ Is there a quick way to connect this page to our app.js? I don't know if it needs a new cal to sp_update_artist or sp_update_artwork or if it's okay using another call.
