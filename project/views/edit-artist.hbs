@@ -1,3 +1,21 @@
+{{! On: 5/14/2025
+For: New page: artist-summary (We had the other pages but wanted a page to make updating 
+the table easy to see), edit-artists
+Source: https://chatgpt.com/
+ChatGPT AI was used to help with the artist-summary page.
+The prompt used was: 
+“That DDL (and eventually the stored procs I had you make) is the backend database for 
+my class webpage, which is called Artly Art Searcher and is meant to be a developer-side 
+archive for artists and art. I have some of the skeletons for the pages using Node.JS with Handlebars. 
+I have a few pages, but want to make a combination page where Artists will be shown using the view I 
+had you make that had a count of each artist's number of artworks. I want to have that query be its own 
+page, with a button in the table for "Update" that will take the user to a page where a new query would 
+only show the selected artist and then a list of each of their artworks. That page would be where the user 
+can edit the artist, their artworks, or the connection between them. Here's what I have so far (very rough 
+so far I know! I just started this part.)”
+As a part of this prompt result the edit-artists page was also created initially by AI and then edited.
+}}
+
 <article>
 <h1>Edit Artist: {{Artist.Artist_Name}}</h1>
 <p>This page lets you update an artist or their artworks. It will also update the intersection table 
@@ -7,8 +25,8 @@
   <label>Artist Name:</label>
   <input type="text" name="fullName" value="{{Artist.Artist_Name}}" />
 
-  <label>Queer?:</label>
-  <input type="checkbox" name="queer" value="1" {{#if Artist.Queer}}checked{{/if}} />
+  <label for='update_artist_id'>Change Artist ID: </label>
+  <input type='number' name='new_artistID' id='update_artist_id' min="1"/>
 
   <label for='update_artist_gender'>Artist Gender: </label>
     <select name='update_artist_gender' id='update_artist_gender'>
@@ -20,29 +38,22 @@
         {{/each}}
     </select><br>
 
-  <label for='birthLocID'>Artist Birth Location: </label>
-<select name='birthLocID' id='birthLocID'>
-  <option value='NULL' disabled>Select a Location</option>
-  <option value='NULL'>&lt; None &gt;</option>
+<label>Queer?:</label>
+  <input type="checkbox" name="queer" value="1" {{#if Artist.Queer}}checked{{/if}} />
+
+<label for='update_artist_birth_location'>Birth Location: </label>
+<select name='birthLocID' id='update_artist_birth_location'>
   {{#each Locations}}
-    <option value='{{this.LocationID}}' {{#if (eq this.LocationID ../Artist.Birthplace)}}selected{{/if}}>
-      {{this.State}} - {{this.Country}}
-    </option>
+    <option value='{{this.Location}}'>{{this.Country}} - {{this.State}}</option>
   {{/each}}
 </select>
 
-  <label for='update_artist_res_location'>Artist Main Residence: </label>
+<label for='update_artist_res_location'>Main Residence: </label>
   <select name='residenceLocID' id='update_artist_res_location'>
-    <option value='NULL' disabled>Select a Location</option>
-    <option value='NULL'>&lt; None &gt;</option>
     {{#each Locations}}
-      <option value='{{this.LocationID}}' {{#if (eq this.Location this.Artist.Residence)}}selected{{/if}}>
-        {{this.State}}
-        -
-        {{this.Country}}
-      </option>
+      <option value='{{this.Location}}'>{{this.Country}} - {{this.State}}</option>
     {{/each}}
-  </select>
+</select>
 
   <button class="submit-btn" type="submit">Update Artist</button>
 </form>
@@ -63,44 +74,54 @@
   <tbody>
     {{#each Artworks}}
     <tr>
-      <form method="POST" action="/update-artwork/{{this.Artwork_ID}}">
-        <td>{{this.Artwork_ID}}<input type="hidden" name="artworkID" value="{{this.Artwork_ID}}" /></td>
-        <td><input type="text" name="artName" value="{{this.Artwork_Name}}" /></td>
-        <td>
-          <input type="checkbox" name="digitalArt" value="1" {{#if this.Digital_Art}}checked{{/if}} />
-        </td>
-        <td><input type="date" name="dateCreated" value="{{this.Date}}" /></td>
-        <td>
-          <select name="artPeriodCode">
-            {{#each ../ArtPeriods}}
-              {{#if (eq this.Period ../this.Period)}}
-                <option value="{{this.Period}}" selected>{{this.Century}} - {{this.Century_Part}}</option>
-              {{else}}
-                <option value="{{this.Period}}">{{this.Century}} - {{this.Century_Part}}</option>
-              {{/if}}
-            {{/each}}
-          </select>
-        </td>
-        <td>
-          <select name="artMediumCode">
-            {{#each ../Mediums}}
-              {{#if (eq this.Medium ../this.Medium)}}
-                <option value="{{this.Medium}}" selected>{{this.Description}}</option>
-              {{else}}
-                <option value="{{this.Medium}}">{{this.Description}}</option>
-              {{/if}}
-            {{/each}}
-          </select>
-        </td>
-        <td><button class="update-btn" type="submit">Update</button></td>
-      </form>
+      <form method="POST" action="/artworks/update">
+  <td>
+    {{this.Artwork_ID}}
+    <input type="hidden" name="old_artworkID" value="{{this.Artwork_ID}}" />
+  </td>
+  <td><input type="text" name="artName" value="{{this.Artwork_Name}}" /></td>
+  <td>
+    <input type="checkbox" name="digitalArt" value="1" {{#if this.Digital_Art}}checked{{/if}} />
+  </td>
+  <td><input type="date" name="dateCreated" value="{{this.Date}}" /></td>
+  <td>
+    <select name="artPeriodCode">
+      {{#each ../ArtPeriods}}
+        {{#if (eq this.Period ../this.Period)}}
+          <option value="{{this.Period}}" selected>{{this.Century}} - {{this.Century_Part}}</option>
+        {{else}}
+          <option value="{{this.Period}}">{{this.Century}} - {{this.Century_Part}}</option>
+        {{/if}}
+      {{/each}}
+    </select>
+  </td>
+  <td>
+    <select name="artMediumCode">
+      {{#each ../Mediums}}
+        {{#if (eq this.Medium ../this.Medium)}}
+          <option value="{{this.Medium}}" selected>{{this.Description}}</option>
+        {{else}}
+          <option value="{{this.Medium}}">{{this.Description}}</option>
+        {{/if}}
+      {{/each}}
+    </select>
+  </td>
+  <td><button class="update-btn" type="submit">Update</button></td>
+</form>
+
     </tr>
     {{/each}}
   </tbody>
 </table>
 
-<form action="/reset-database" method="POST" style="margin-top: 1em;">
+<form action="/reset-database" method="POST" style="margin-top: 1em;" onsubmit="return confirmReset();">
   <button class="reset-btn" type="submit">Reset Database</button>
 </form>
+
+<script>
+  function confirmReset() {
+    return confirm("Are you sure you want to reset the entire database? This action cannot be undone.");
+  }
+</script>
 
 </article>

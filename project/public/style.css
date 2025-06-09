@@ -1,3 +1,15 @@
+/* On: 5/13/2025:
+For: home.hbs, artists.hbs, artworks.hbs, locations.hbs, gendercodes.hbs, mediums.hbs, CSS
+Source: Class exploration - Web Application Technology
+Starter code from class was used to model our basic webpages and the start of our CSS 
+
+Adobe Colors was used to create a color theme for our website. 
+Source: https://color.adobe.com/create/image Used For: We used Van Gogh's Sunflowers 
+to sample colors for the theme and used the hex code colors provided by Adobe for our web page. 
+Date: 5/6/2025
+
+Background image for our website is Van Gogh's Sunflowers. 
+Used for: Background image and color theme Date: 5/6/2025 */
 
 :root {
   --heading-size: 150%;

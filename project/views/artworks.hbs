@@ -1,3 +1,13 @@
+{{! Source code was used and adapted from: 
+https://canvas.oregonstate.edu/courses/1999601/pages/exploration-web-application-technology-2?module_item_id=25352948 
+Used for: Creating the Node.JS starting code and the CRUD pages for our "Artists" page and home page 
+Date: 5/6/2025
+
+On: 5/13/2025:
+For: home.hbs, artists.hbs, artworks.hbs, locations.hbs, gendercodes.hbs, mediums.hbs, CSS
+Source: Class exploration - Web Application Technology
+Starter code from class was used to model our basic webpages and the start of our CSS }}
+
 <article>
 <h1>Artworks</h1>
 <p>This table records the names and information of the artworks for the artists we have the search available for. 
@@ -32,9 +42,15 @@
             <td>{{this.fullName}}</td>
             
              <td>
-                <form action="/artworks/delete/{{this.artworkID}}" method="POST" style="display:inline;">
+                <form action="/artworks/delete/{{this.artworkID}}" method="POST" style="display:inline;" onsubmit="return confirmDelete();">
                     <button type="submit" class="delete-btn">Delete</button>
                 </form>
+
+                <script>
+                    function confirmDelete() {
+                    return confirm("Are you sure you want to delete this artwork?");
+                    }
+                </script>
             </td>
         </tr>
         {{/each}}
@@ -127,8 +143,14 @@
     <button class="submit-btn" type='submit'>Update Artwork</button>
 </form>
 
-<form action="/reset-database" method="POST" style="margin-top: 1em;">
+<form action="/reset-database" method="POST" style="margin-top: 1em;" onsubmit="return confirmReset();">
   <button class="reset-btn" type="submit">Reset Database</button>
 </form>
+
+<script>
+  function confirmReset() {
+    return confirm("Are you sure you want to reset the entire database? This action cannot be undone.");
+  }
+</script>
 
 </article>

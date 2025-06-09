@@ -1,3 +1,95 @@
+// NOTE: The citations for the individual stored procs and view are included with the respective 
+// code in our PL.SQL and DDL.SQL files
+// These are the additional citations for the app.js.
+// All citations also included in the README file for our project in a consolidated format.
+
+// Citation for AI use:
+// On 5/22/2025
+// For: The POST app.js statements to call the stored procedures for our deletes
+// Source: chatgpt.com
+// ChatGPT was used to figure out the format for the post statements for our deletes
+// The prompt used was: 
+// “What should the app.js side look like for using a "delete" button on the artists 
+// page to call the sp_delete_artist stored procedure?”
+
+// Citation for AI use
+// On: 6/2/2025
+// For: sp_update_artwork called from our app.js
+// Source: https://chatgpt.com/
+// ChatGPT AI was used to make the app.js connection to sp_update_artwork
+// The prompt used was: 
+// "How would I connect that to my app.js so it can be called from artworks.hbs?"
+
+// Citation for AI use
+// On: 6/2/2025
+// For: sp_update_artist called from our app.js
+// Source: https://chatgpt.com/
+// ChatGPT AI was used to make the app.js connection to sp_update_artist
+// The prompt used was: 
+// “Could you help me connect that stored procedure to be called from app.js?”
+
+// Citation for AI use
+// On: 6/2/2025
+// For: sp_insert_artwork called from our app.js
+// Source: https://chatgpt.com/
+// ChatGPT AI was used to make the app.js connection to sp_insert_artwork
+// The prompt used was: 
+// “[ asked for similar help for app.js as with the artists.hbs page ] This is my stored 
+// procedure for sp_insert_artwork. When I made that originally each artwork could only 
+// have one artist, but now multiple artists are allowed per artwork too. That will mean 
+// that someone is allowed to add a new artist to an existing artwork but not necessarily 
+// replace the old listed artist. Also, while we let an artist get added without an artwork, 
+// we require an artwork to have at least one artist to get added, so the artist name is a requirement.”
+
+// Citation for AI use:
+// On: 5/13/2025
+// For: sp_insert_artwork
+// Source: https://chatgpt.com/
+/// ChatGPT AI was used to help fix the artwork insert on the app.js 
+// The prompt used was: 
+// Could you make me a new stored procedure to insert into the Artist_Artworks table, 
+// then give me an updated version of app.js that will call sp_insert_artwork to add an 
+// artwork and then will call the new sp_insert_artist_artwork to take care of that?
+
+// Citation for AI use:
+// On: 5/13/2025
+// For: edit-artist.hbs and its app.js connection
+// Source: https://chatgpt.com/
+// ChatGPT AI was used to help fix the edit-artist insert on the app.js 
+// The prompt used was: 
+// Is there a quick way to connect this page to our app.js? I don't know if it needs a new 
+// call to sp_update_artist or sp_update_artwork or if it's okay using another call.
+
+// On: 5/21/2025 
+// For: Code and placement for Reset Button on artist-summary.hbs page
+// Source: chatgpt.com
+// ChatGPT AI was use to figure out what we were doing wrong with our code to make a reset button for our form.
+// The prompt used was: 
+// I'm still getting the hang of javascript! My next immediate task is to implement a button on 
+// one of the webpages to allow a user to reset the database. I have the stored procedure already with 
+// my DDL in it, so that part is good. I added a reset button on this page, but would like to know if
+//  that seems like the right sort of button.”
+// [ Code for the artist-summary.hbs page ]
+
+// Citation for AI use:
+// On: 5/13/2025
+/// For: sp_insert_artwork
+// Source: https://chatgpt.com/
+// ChatGPT AI was used to help fix the artwork insert on the app.js 
+// The prompt used was: 
+// Could you make me a new stored procedure to insert into the Artist_Artworks table, 
+// then give me an updated version of app.js that will call sp_insert_artwork to add an 
+// artwork and then will call the new sp_insert_artist_artwork to take care of that?
+
+// Citation for AI use:
+// On: 5/13/2025
+// For: edit-artist.hbs and its app.js connection
+// Source: https://chatgpt.com/
+// ChatGPT AI was used to help fix the edit-artist insert on the app.js 
+// The prompt used was: 
+// Is there a quick way to connect this page to our app.js? I don't know if it needs a new cal to sp_update_artist or sp_update_artwork or if it's okay using another call.
+
+
 // ########################################
 // ########## SETUP
 
@@ -248,6 +340,7 @@ app.get('/edit-artist/:ID', async function (req, res) {
 app.post('/update-artist/:id', async (req, res) => {
   const oldID = parseInt(req.params.id);
   const {
+    new_artistID,
     fullName,
     update_artist_gender,
     queer,
@@ -255,43 +348,36 @@ app.post('/update-artist/:id', async (req, res) => {
     birthLocID
   } = req.body;
 
-  // Safely handle null-ish and checkbox inputs
-  const finalQueer = queer === '1' ? 1 : 0;
-  const gender = update_artist_gender || null;
-  const resLoc = residenceLocID === 'NULL' ? null : residenceLocID;
-  const birthLoc = birthLocID === 'NULL' ? null : birthLocID;
-
   try {
-    // Call your stored procedure
+    const [rows] = await db.query('SELECT * FROM Artists WHERE artistID = ?', [oldID]);
+    if (rows.length === 0) {
+      return res.status(404).send('Artist not found.');
+    }
+
+    const current = rows[0];
+    const finalNewID = new_artistID && new_artistID.trim() !== ''
+      ? parseInt(new_artistID)
+      : oldID;
+
+    const finalName = fullName || current.fullName;
+    const finalGender = update_artist_gender || current.genderCode;
+    const finalQueer = queer === '1' ? 1 : 0;
+    const finalRes = residenceLocID || current.residenceLocID;
+    const finalBirth = birthLocID || current.birthLocID;
+
     await db.query(
       `CALL sp_update_artist(?, ?, ?, ?, ?, ?, ?, @msg);`,
-      [oldID, oldID, fullName, gender, finalQueer, resLoc, birthLoc]
+      [oldID, finalNewID, finalName, finalGender, finalQueer, finalRes, finalBirth]
     );
 
-    // Retrieve the status message
     const [[{ statusMessage }]] = await db.query('SELECT @msg AS statusMessage;');
-    console.log('Artist update status:', statusMessage);
+    console.log('Update Status:', statusMessage);
 
     res.redirect('/artist-summary');
   } catch (err) {
-    console.error('Error updating artist from edit page:', err);
-    res.status(500).send('Error while updating artist.');
+    console.error('Error updating artist (edit-artist route):', err);
+    res.status(500).send('An error occurred while updating the artist.');
   }
-});
-
-app.post('/update-artwork/:Artwork_ID', async function (req, res) {
-    const { artworkID, artName, digitalArt, dateCreated, artPeriodCode, artMediumCode } = req.body;
-
-    try {
-        await db.query(
-            `CALL UpdateArtworkFull(?, ?, ?, ?, ?, ?, ?)`,
-            [artworkID, artworkID, artName, digitalArt ? 1 : 0, dateCreated, artPeriodCode, artMediumCode]
-        );
-        res.redirect('back'); // This sends the user back to the edit-artist page
-    } catch (err) {
-        console.error('Error updating artwork:', err);
-        res.status(500).send('Failed to update artwork.');
-    }
 });
 
 app.post('/reset-database', async (req, res) => {

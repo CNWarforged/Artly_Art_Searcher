@@ -1,3 +1,21 @@
+{{! On: 5/14/2025
+For: New page: artist-summary (We had the other pages but wanted a page to make updating 
+the table easy to see), edit-artists
+Source: https://chatgpt.com/
+ChatGPT AI was used to help with the artist-summary page.
+The prompt used was: 
+“That DDL (and eventually the stored procs I had you make) is the backend database for 
+my class webpage, which is called Artly Art Searcher and is meant to be a developer-side 
+archive for artists and art. I have some of the skeletons for the pages using Node.JS with Handlebars. 
+I have a few pages, but want to make a combination page where Artists will be shown using the view I 
+had you make that had a count of each artist's number of artworks. I want to have that query be its own 
+page, with a button in the table for "Update" that will take the user to a page where a new query would 
+only show the selected artist and then a list of each of their artworks. That page would be where the user 
+can edit the artist, their artworks, or the connection between them. Here's what I have so far (very rough 
+so far I know! I just started this part.)”
+As a part of this prompt result the edit-artists page was also created initially by AI and then edited.
+}}
+
 <article>
 <h1>Artist Summary for ArtistArtworks</h1>
 <p>This is a summary table to view our artists and the count of their works in our database. 
@@ -27,7 +45,14 @@
   </tbody>
 </table>
 
-<form action="/reset-database" method="POST" style="margin-top: 1em;">
+<form action="/reset-database" method="POST" style="margin-top: 1em;" onsubmit="return confirmReset();">
   <button class="reset-btn" type="submit">Reset Database</button>
 </form>
+
+<script>
+  function confirmReset() {
+    return confirm("Are you sure you want to reset the entire database? This action cannot be undone.");
+  }
+</script>
+
 </article>
